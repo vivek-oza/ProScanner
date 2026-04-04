@@ -1274,11 +1274,21 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0]
         if path == "/":
-            try:
-                with open("index.html","r",encoding="utf-8") as f: html = f.read().encode()
-                self.send_response(200); self.send_header("Content-Type","text/html; charset=utf-8")
-                self.send_header("Content-Length",str(len(html))); self._cors(); self.end_headers(); self.wfile.write(html)
-            except FileNotFoundError: self.send_json({"error":"index.html not found"},404)
+            for name in ("index_redesigned.html", "index.html"):
+                try:
+                    with open(name, "r", encoding="utf-8") as f:
+                        html = f.read().encode()
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/html; charset=utf-8")
+                    self.send_header("Content-Length", str(len(html)))
+                    self._cors()
+                    self.end_headers()
+                    self.wfile.write(html)
+                    break
+                except FileNotFoundError:
+                    continue
+            else:
+                self.send_json({"error": "No index_redesigned.html or index.html found"}, 404)
         elif path == "/api/scans":        self.send_json(get_all_scans())
         elif path.startswith("/api/scans/"):
             try:

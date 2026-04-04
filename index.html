@@ -2293,6 +2293,20 @@
         </div>
       </div>
 
+      <div id="apiScanProgress" style="display:none;margin-bottom:14px">
+        <div class="tpanel">
+          <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SCANNING</span></div>
+          <div class="tpanel-body">
+            <div class="progress-row">
+              <span class="progress-label" id="apiProgressLabel">Preparing…</span>
+              <span class="progress-pct" id="apiProgressPct">0%</span>
+            </div>
+            <div class="pbar-bg"><div class="pbar-fill" id="apiPbarFill"></div></div>
+            <div class="live-log" id="apiScanLog" style="margin-top:10px"></div>
+          </div>
+        </div>
+      </div>
+
       <div id="apiSecResult" style="margin-top:14px;display:none">
         <div class="verdict-banner" id="apiSecBanner" style="margin-bottom:14px"></div>
         <div class="grid-2" style="margin-bottom:14px">
@@ -2764,25 +2778,75 @@
     ${sn ? `<div style="font-size:10px;color:var(--tx3);margin-top:6px;word-break:break-all">${sn}</div>` : ''}
   </div></div>`;
     }
+    const API_SCAN_TICKER_PATHS = ['/api', '/api/v1', '/graphql', '/users', '/admin', '/health', '/swagger.json', '/openapi.json', '/login', '/register', '/v1/users'];
+    function apiProgress(pct, label) {
+      const fill = document.getElementById('apiPbarFill');
+      const pEl = document.getElementById('apiProgressPct');
+      const lEl = document.getElementById('apiProgressLabel');
+      if (fill) fill.style.width = pct + '%';
+      if (pEl) pEl.textContent = Math.round(pct) + '%';
+      if (lEl) lEl.textContent = label;
+    }
+    function addApiLog(level, msg) {
+      const log = document.getElementById('apiScanLog');
+      if (!log) return;
+      const d = document.createElement('div');
+      d.className = 'log-row';
+      d.innerHTML = `<span class="log-ts">${new Date().toTimeString().slice(0, 8)}</span><span class="log-tag ${level}">${level}</span><span class="log-msg">${escHtml(msg)}</span>`;
+      log.appendChild(d);
+      log.scrollTop = log.scrollHeight;
+    }
     async function runApiSecurityScan() {
       const url = document.getElementById('apiBaseUrl').value.trim();
       if (!url) { toast('Enter an API base URL.'); return; }
       const raw = document.getElementById('apiPaths').value.trim();
       const paths = raw ? raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : null;
+      const tickerPathPool = (paths && paths.length ? paths.slice(0, 24) : API_SCAN_TICKER_PATHS);
       const btn = document.getElementById('apiScanBtn');
       const btnHtml = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" /></svg><span>Scan API</span>`;
       const loadHtml = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg><span>Scanning…</span>`;
       btn.disabled = true;
       btn.innerHTML = loadHtml;
+      document.getElementById('apiSecResult').style.display = 'none';
+      document.getElementById('apiScanProgress').style.display = 'block';
+      const logEl = document.getElementById('apiScanLog');
+      if (logEl) logEl.innerHTML = '';
+      apiProgress(5, 'Validating target…');
+      addApiLog('INFO', 'Resolving API base URL and starting probe…');
+      let prog = 10;
+      const ticker = setInterval(() => {
+        if (prog < 88) {
+          prog += Math.random() * 4;
+          apiProgress(prog, 'Probing endpoints…');
+          const p = tickerPathPool[Math.floor(Math.random() * tickerPathPool.length)] || '/api';
+          const m = Math.random() < 0.5 ? 'GET' : 'POST';
+          addApiLog('DEBUG', `${m} ${p}…`);
+        }
+      }, 600);
       try {
         const res = await fetch(`${API}/api/api_security`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url, paths }) });
+        clearInterval(ticker);
+        apiProgress(100, 'Scan complete.');
         const txt = await res.text();
         let data;
-        try { data = JSON.parse(txt); } catch { toast('Server returned invalid JSON (is the backend running?)'); return; }
-        if (!res.ok) { toast(data.error || ('Request failed: HTTP ' + res.status)); return; }
+        try { data = JSON.parse(txt); } catch {
+          addApiLog('ERROR', 'Invalid JSON from server — is the backend running?');
+          toast('Server returned invalid JSON (is the backend running?)');
+          return;
+        }
+        if (!res.ok) {
+          addApiLog('ERROR', data.error || ('HTTP ' + res.status));
+          toast(data.error || ('Request failed: HTTP ' + res.status));
+          return;
+        }
+        const nFind = (data.findings && data.findings.length) || 0;
+        addApiLog('INFO', `Done — ${data.endpoints_tested || 0} endpoint(s), score ${data.security_score != null ? data.security_score : '—'}, ${nFind} finding(s).`);
         renderApiSecurityResult(data);
-      } catch (e) { toast('Network error — start backend.py on port 8765. ' + e.message); }
-      finally { btn.disabled = false; btn.innerHTML = btnHtml; }
+      } catch (e) {
+        clearInterval(ticker);
+        addApiLog('ERROR', e.message);
+        toast('Network error — start backend.py on port 8765. ' + e.message);
+      } finally { btn.disabled = false; btn.innerHTML = btnHtml; }
     }
     function renderApiSecurityResult(data) {
       document.getElementById('apiSecResult').style.display = 'block';
@@ -3430,6 +3494,7 @@
 
     function initSim() {
       const sel = document.getElementById('simSelector');
+      if (!sel) return;
       sel.innerHTML = SIM_ATTACKS.map((a, i) => `<div class="sim-pick ${i === 0 ? 'active' : ''}" onclick="selectSim(${i},this)">
       ${a.name}</div>`).join('');
       renderSim(0);
@@ -3444,6 +3509,7 @@
 
     function renderSim(i) {
       const a = SIM_ATTACKS[i];
+      if (!document.getElementById('simNormal')) return;
 
       // Normal query
       document.getElementById('simNormal').textContent =
