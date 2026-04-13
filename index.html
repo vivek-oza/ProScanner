@@ -1,62 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ProScanner v4 — Security Terminal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <style>
     /* ═══════════════════════════════════════════════════════
        PROSCANNER v4  ·  DARK GREY TERMINAL — Professional TUI
        Palette: dark grey bg · elevated panels · vivid accents
     ═══════════════════════════════════════════════════════ */
     :root {
-      --bg:        #1a1a1a;   /* dark grey background */
-      --bg2:       #202020;
-      --panel:     #262626;
-      --panel2:    #2c2c2c;
-      --surface:   #323232;
-      --border:    #3a3a3a;
-      --border2:   #444444;
-      --border3:   #525252;
+      --bg: #1a1a1a;
+      /* dark grey background */
+      --bg2: #202020;
+      --panel: #262626;
+      --panel2: #2c2c2c;
+      --surface: #323232;
+      --border: #3a3a3a;
+      --border2: #444444;
+      --border3: #525252;
 
-      --g0:        #34d980;   /* green  — vivid, saturated */
-      --g1:        #2ec96e;
-      --g2:        #22b85e;
-      --g3:        #1a9a4e;
-      --g-dim:     rgba(52,217,128,.09);
-      --g-glow:    rgba(52,217,128,.16);
-      --g-glow2:   rgba(52,217,128,.24);
+      --g0: #34d980;
+      /* green  — vivid, saturated */
+      --g1: #2ec96e;
+      --g2: #22b85e;
+      --g3: #1a9a4e;
+      --g-dim: rgba(52, 217, 128, .09);
+      --g-glow: rgba(52, 217, 128, .16);
+      --g-glow2: rgba(52, 217, 128, .24);
 
-      --r0:        #ff6b6b;   /* red    — softer, less blunt */
-      --r1:        #f04040;
-      --r-dim:     rgba(255,107,107,.10);
-      --r-glow:    rgba(255,107,107,.18);
+      --r0: #ff6b6b;
+      /* red    — softer, less blunt */
+      --r1: #f04040;
+      --r-dim: rgba(255, 107, 107, .10);
+      --r-glow: rgba(255, 107, 107, .18);
 
-      --y0:        #ffd166;   /* amber  — warm yellow, not harsh */
-      --y1:        #f5bc3a;
-      --y-dim:     rgba(255,209,102,.09);
-      --y-glow:    rgba(255,209,102,.16);
+      --y0: #ffd166;
+      /* amber  — warm yellow, not harsh */
+      --y1: #f5bc3a;
+      --y-dim: rgba(255, 209, 102, .09);
+      --y-glow: rgba(255, 209, 102, .16);
 
-      --c0:        #5cb8ff;   /* blue   — bright sky blue */
-      --c1:        #3a9eed;
-      --c-dim:     rgba(92,184,255,.09);
-      --c-glow:    rgba(92,184,255,.16);
+      --c0: #5cb8ff;
+      /* blue   — bright sky blue */
+      --c1: #3a9eed;
+      --c-dim: rgba(92, 184, 255, .09);
+      --c-glow: rgba(92, 184, 255, .16);
 
-      --tx0:       #f0f0f0;   /* primary text — near white */
-      --tx1:       #b8b8b8;   /* secondary */
-      --tx2:       #787878;   /* muted */
-      --tx3:       #4a4a4a;   /* very muted */
+      --tx0: #f0f0f0;
+      /* primary text — near white */
+      --tx1: #b8b8b8;
+      /* secondary */
+      --tx2: #787878;
+      /* muted */
+      --tx3: #4a4a4a;
+      /* very muted */
 
-      --mono:      'JetBrains Mono', 'JetBrains Mono', monospace;
-      --mono2:     'JetBrains Mono', monospace;
+      --mono: 'JetBrains Mono', 'JetBrains Mono', monospace;
+      --mono2: 'JetBrains Mono', monospace;
 
       --sidebar-w: 228px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
-    html { scroll-behavior: smooth }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
 
     body {
       background: var(--bg);
@@ -69,35 +90,47 @@
     /* Thin accent line at very top */
     body::before {
       content: '';
-      position: fixed; top: 0; left: 0; right: 0; height: 2px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
       background: linear-gradient(90deg, var(--c0), var(--g0), var(--c0));
       opacity: .30;
-      pointer-events: none; z-index: 9999;
+      pointer-events: none;
+      z-index: 9999;
     }
 
     /* Subtle dot grid */
     body::after {
       content: '';
-      position: fixed; inset: 0;
-      background-image: radial-gradient(circle, rgba(96,165,250,.022) 1px, transparent 1px);
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(96, 165, 250, .022) 1px, transparent 1px);
       background-size: 28px 28px;
-      pointer-events: none; z-index: 0;
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* ── LAYOUT ── */
     .sidebar {
-      position: fixed; left: 0; top: 0; bottom: 0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
       width: var(--sidebar-w);
       background: var(--panel);
       border-right: 1px solid var(--border3);
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
       z-index: 100;
     }
 
     .main {
       margin-left: var(--sidebar-w);
       padding: 32px 36px;
-      position: relative; z-index: 1;
+      position: relative;
+      z-index: 1;
       min-height: 100vh;
     }
 
@@ -108,7 +141,9 @@
     }
 
     .logo-icon {
-      display: flex; align-items: center; gap: 11px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
       margin-bottom: 8px;
     }
 
@@ -136,7 +171,11 @@
       padding-left: 29px;
     }
 
-    .nav { flex: 1; padding: 12px 8px; overflow-y: auto }
+    .nav {
+      flex: 1;
+      padding: 12px 8px;
+      overflow-y: auto
+    }
 
     .nav-section {
       font-size: 9px;
@@ -148,7 +187,9 @@
     }
 
     .nav-link {
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 9px 10px;
       border-radius: 4px;
       font-size: 12px;
@@ -176,12 +217,14 @@
     }
 
     .nav-link.active {
-      background: rgba(96,165,250,.1);
+      background: rgba(96, 165, 250, .1);
       color: var(--c0);
-      border-color: rgba(96,165,250,.2);
+      border-color: rgba(96, 165, 250, .2);
     }
 
-    .nav-link.active .nav-prefix { color: var(--c0) }
+    .nav-link.active .nav-prefix {
+      color: var(--c0)
+    }
 
     .sidebar-foot {
       padding: 14px 16px;
@@ -190,32 +233,57 @@
     }
 
     .sf-row {
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       color: var(--tx2);
       margin-bottom: 4px;
     }
 
     .sf-dot {
-      width: 7px; height: 7px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--g0);
       animation: blink 2.8s infinite;
     }
 
-    .sf-dot.offline { background: var(--r0) }
+    .sf-dot.offline {
+      background: var(--r0)
+    }
 
     @keyframes blink {
-      0%, 100% { opacity: 1 }
-      50% { opacity: .3 }
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
     }
 
     /* ── PAGE SYSTEM ── */
-    .page { display: none }
-    .page.active { display: block; animation: fadeUp .18s ease }
+    .page {
+      display: none
+    }
+
+    .page.active {
+      display: block;
+      animation: fadeUp .18s ease
+    }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(5px) }
-      to   { opacity: 1; transform: none }
+      from {
+        opacity: 0;
+        transform: translateY(5px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
     }
 
     /* ── PAGE HEADER ── */
@@ -259,7 +327,9 @@
     }
 
     .tpanel-header {
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 11px 16px;
       border-bottom: 1px solid var(--border);
       font-size: 10px;
@@ -274,13 +344,19 @@
       font-weight: 600;
     }
 
-    .tpanel-header .tph-title { color: var(--tx1); font-weight: 500 }
+    .tpanel-header .tph-title {
+      color: var(--tx1);
+      font-weight: 500
+    }
 
-    .tpanel-body { padding: 18px }
+    .tpanel-body {
+      padding: 18px
+    }
 
     /* ── INPUT ── */
     .tinput-wrap {
-      display: flex; align-items: center;
+      display: flex;
+      align-items: center;
       background: var(--bg2);
       border: 1px solid var(--border2);
       border-radius: 5px;
@@ -290,7 +366,7 @@
 
     .tinput-wrap:focus-within {
       border-color: var(--c1);
-      box-shadow: 0 0 0 3px rgba(96,165,250,.12);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, .12);
     }
 
     .tinput-prompt {
@@ -313,7 +389,9 @@
       outline: none;
     }
 
-    .tinput::placeholder { color: var(--tx3) }
+    .tinput::placeholder {
+      color: var(--tx3)
+    }
 
     .tinput-label {
       font-size: 10px;
@@ -327,7 +405,9 @@
 
     /* ── BUTTONS ── */
     .tbtn {
-      display: inline-flex; align-items: center; gap: 7px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
       padding: 10px 20px;
       background: transparent;
       border: 1px solid var(--border3);
@@ -348,9 +428,15 @@
       color: var(--c0);
     }
 
-    .tbtn:disabled { opacity: .35; cursor: not-allowed }
+    .tbtn:disabled {
+      opacity: .35;
+      cursor: not-allowed
+    }
 
-    .tbtn-sm { padding: 6px 12px; font-size: 10px }
+    .tbtn-sm {
+      padding: 6px 12px;
+      font-size: 10px
+    }
 
     .tbtn-danger {
       border-color: var(--r0);
@@ -381,14 +467,21 @@
       background: var(--surface);
     }
 
-    .tbtn svg { width: 12px; height: 12px }
+    .tbtn svg {
+      width: 12px;
+      height: 12px
+    }
 
     /* ── INPUT ROW ── */
     .input-row {
-      display: flex; gap: 10px; align-items: flex-end;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
     }
 
-    .input-row .tinput-wrap { flex: 1 }
+    .input-row .tinput-wrap {
+      flex: 1
+    }
 
     /* ── CHIP GRID ── */
     .chip-grid {
@@ -398,7 +491,9 @@
     }
 
     .chip {
-      display: flex; align-items: center; gap: 9px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
       padding: 8px 11px;
       background: var(--bg2);
       border: 1px solid var(--border);
@@ -415,16 +510,21 @@
 
     .chip.selected {
       background: var(--g-dim);
-      border-color: rgba(74,222,128,.25);
+      border-color: rgba(74, 222, 128, .25);
     }
 
     .chip-box {
-      width: 13px; height: 13px;
+      width: 13px;
+      height: 13px;
       border: 1px solid var(--border2);
       border-radius: 2px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: all .13s;
-      font-size: 9px; color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .13s;
+      font-size: 9px;
+      color: transparent;
     }
 
     .chip.selected .chip-box {
@@ -439,7 +539,9 @@
       font-family: var(--mono2);
     }
 
-    .chip.selected .chip-label { color: var(--g0) }
+    .chip.selected .chip-label {
+      color: var(--g0)
+    }
 
     .chip-count {
       margin-left: auto;
@@ -448,24 +550,43 @@
     }
 
     .chip-controls {
-      display: flex; gap: 6px; margin-bottom: 12px;
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
     }
 
     /* ── PROGRESS ── */
-    .progress-wrap { display: none; margin-top: 14px }
-    .progress-wrap.show { display: block }
-
-    .progress-row {
-      display: flex; justify-content: space-between;
-      align-items: center; margin-bottom: 6px;
+    .progress-wrap {
+      display: none;
+      margin-top: 14px
     }
 
-    .progress-label { font-size: 11px; color: var(--tx1) }
-    .progress-pct { font-size: 11px; color: var(--c0) }
+    .progress-wrap.show {
+      display: block
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      color: var(--tx1)
+    }
+
+    .progress-pct {
+      font-size: 11px;
+      color: var(--c0)
+    }
 
     .pbar-bg {
-      height: 3px; background: var(--surface);
-      border-radius: 2px; overflow: hidden;
+      height: 3px;
+      background: var(--surface);
+      border-radius: 2px;
+      overflow: hidden;
     }
 
     .pbar-fill {
@@ -478,21 +599,27 @@
 
     /* ── STEP TRACKER ── */
     .steps-row {
-      display: flex; gap: 0;
+      display: flex;
+      gap: 0;
       margin: 14px 0 10px;
       overflow-x: auto;
     }
 
     .step-item {
-      display: flex; align-items: center; gap: 0;
+      display: flex;
+      align-items: center;
+      gap: 0;
       flex-shrink: 0;
     }
 
     .step-dot {
-      width: 22px; height: 22px;
+      width: 22px;
+      height: 22px;
       border-radius: 3px;
       border: 1px solid var(--border2);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 10px;
       color: var(--tx3);
       background: var(--bg2);
@@ -502,7 +629,7 @@
 
     .step-item.done .step-dot {
       background: var(--g-dim);
-      border-color: rgba(74,222,128,.25);
+      border-color: rgba(74, 222, 128, .25);
       color: var(--g0);
     }
 
@@ -514,26 +641,43 @@
     }
 
     @keyframes stepPulse {
-      0%, 100% { box-shadow: 0 0 0 2px rgba(96,165,250,.1) }
-      50% { box-shadow: 0 0 0 4px rgba(96,165,250,.2) }
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 2px rgba(96, 165, 250, .1)
+      }
+
+      50% {
+        box-shadow: 0 0 0 4px rgba(96, 165, 250, .2)
+      }
     }
 
     .step-line {
-      width: 32px; height: 1px;
+      width: 32px;
+      height: 1px;
       background: var(--border);
       transition: background .25s;
     }
 
-    .step-item.done .step-line { background: rgba(74,222,128,.3) }
+    .step-item.done .step-line {
+      background: rgba(74, 222, 128, .3)
+    }
 
     .step-name {
-      font-size: 9px; color: var(--tx3);
-      margin-top: 3px; text-align: center;
+      font-size: 9px;
+      color: var(--tx3);
+      margin-top: 3px;
+      text-align: center;
       white-space: nowrap;
     }
 
-    .step-item.done .step-name { color: var(--g1) }
-    .step-item.active .step-name { color: var(--c0) }
+    .step-item.done .step-name {
+      color: var(--g1)
+    }
+
+    .step-item.active .step-name {
+      color: var(--c0)
+    }
 
     /* ── LIVE LOG ── */
     .live-log {
@@ -554,30 +698,71 @@
       gap: 8px;
     }
 
-    .log-ts { color: var(--tx3) }
+    .log-ts {
+      color: var(--tx3)
+    }
 
     .log-tag {
-      font-size: 9px; font-weight: 700;
-      padding: 1px 5px; border-radius: 2px;
-      text-align: center; align-self: center;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 2px;
+      text-align: center;
+      align-self: center;
       letter-spacing: .04em;
     }
 
-    .log-tag.INFO  { background: var(--c-dim); color: var(--c0) }
-    .log-tag.DEBUG { background: var(--surface); color: var(--tx2) }
-    .log-tag.WARN  { background: var(--y-dim); color: var(--y0) }
-    .log-tag.VULN  { background: var(--r-dim); color: var(--r0); font-weight: 900 }
-    .log-tag.ERROR { background: var(--r-dim); color: var(--r0) }
+    .log-tag.INFO {
+      background: var(--c-dim);
+      color: var(--c0)
+    }
 
-    .log-msg { color: var(--tx1); word-break: break-all }
-    .log-msg.vuln-msg { color: var(--r0); font-weight: 700 }
+    .log-tag.DEBUG {
+      background: var(--surface);
+      color: var(--tx2)
+    }
+
+    .log-tag.WARN {
+      background: var(--y-dim);
+      color: var(--y0)
+    }
+
+    .log-tag.VULN {
+      background: var(--r-dim);
+      color: var(--r0);
+      font-weight: 900
+    }
+
+    .log-tag.ERROR {
+      background: var(--r-dim);
+      color: var(--r0)
+    }
+
+    .log-msg {
+      color: var(--tx1);
+      word-break: break-all
+    }
+
+    .log-msg.vuln-msg {
+      color: var(--r0);
+      font-weight: 700
+    }
 
     /* ── VERDICT BANNER ── */
-    .result-area { display: none; margin-top: 14px }
-    .result-area.show { display: block; animation: fadeUp .3s ease }
+    .result-area {
+      display: none;
+      margin-top: 14px
+    }
+
+    .result-area.show {
+      display: block;
+      animation: fadeUp .3s ease
+    }
 
     .verdict-banner {
-      display: flex; align-items: center; gap: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
       padding: 18px 22px;
       border-radius: 6px;
       border: 1px solid;
@@ -585,24 +770,35 @@
     }
 
     .verdict-banner.vuln {
-      background: rgba(248,113,113,.07);
-      border-color: rgba(248,113,113,.2);
+      background: rgba(248, 113, 113, .07);
+      border-color: rgba(248, 113, 113, .2);
     }
 
     .verdict-banner.safe {
-      background: rgba(74,222,128,.06);
-      border-color: rgba(74,222,128,.18);
+      background: rgba(74, 222, 128, .06);
+      border-color: rgba(74, 222, 128, .18);
     }
 
     .verdict-icon {
-      width: 42px; height: 42px;
+      width: 42px;
+      height: 42px;
       border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; border: 1px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid;
     }
 
-    .verdict-banner.vuln .verdict-icon { border-color: rgba(248,113,113,.2); background: rgba(248,113,113,.1) }
-    .verdict-banner.safe .verdict-icon { border-color: rgba(74,222,128,.18); background: rgba(74,222,128,.08) }
+    .verdict-banner.vuln .verdict-icon {
+      border-color: rgba(248, 113, 113, .2);
+      background: rgba(248, 113, 113, .1)
+    }
+
+    .verdict-banner.safe .verdict-icon {
+      border-color: rgba(74, 222, 128, .18);
+      background: rgba(74, 222, 128, .08)
+    }
 
     .verdict-title {
       font-family: var(--mono2);
@@ -611,10 +807,19 @@
       letter-spacing: .03em;
     }
 
-    .verdict-banner.vuln .verdict-title { color: var(--r0) }
-    .verdict-banner.safe .verdict-title { color: var(--g0) }
+    .verdict-banner.vuln .verdict-title {
+      color: var(--r0)
+    }
 
-    .verdict-sub { font-size: 11px; color: var(--tx2); margin-top: 3px }
+    .verdict-banner.safe .verdict-title {
+      color: var(--g0)
+    }
+
+    .verdict-sub {
+      font-size: 11px;
+      color: var(--tx2);
+      margin-top: 3px
+    }
 
     /* ── STAT GRID ── */
     .stat-grid {
@@ -647,23 +852,40 @@
       margin-top: 6px;
     }
 
-    .stat-box.green .stat-num { color: var(--g0) }
-    .stat-box.red   .stat-num { color: var(--r0) }
-    .stat-box.amber .stat-num { color: var(--y0) }
-    .stat-box.cyan  .stat-num { color: var(--c0) }
-    .stat-box.accent .stat-num { color: var(--c0) }
+    .stat-box.green .stat-num {
+      color: var(--g0)
+    }
+
+    .stat-box.red .stat-num {
+      color: var(--r0)
+    }
+
+    .stat-box.amber .stat-num {
+      color: var(--y0)
+    }
+
+    .stat-box.cyan .stat-num {
+      color: var(--c0)
+    }
+
+    .stat-box.accent .stat-num {
+      color: var(--c0)
+    }
 
     /* ── TAB BAR ── */
     .tab-bar {
-      display: flex; gap: 0;
+      display: flex;
+      gap: 0;
       margin-bottom: 16px;
       border-bottom: 1px solid var(--border2);
     }
 
     .tab {
       padding: 8px 16px;
-      font-size: 10px; font-family: var(--mono2);
-      text-transform: uppercase; letter-spacing: .08em;
+      font-size: 10px;
+      font-family: var(--mono2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
       color: var(--tx2);
       cursor: pointer;
       border: 1px solid transparent;
@@ -673,7 +895,9 @@
       border-radius: 4px 4px 0 0;
     }
 
-    .tab:hover { color: var(--tx1) }
+    .tab:hover {
+      color: var(--tx1)
+    }
 
     .tab.active {
       background: var(--panel);
@@ -693,15 +917,22 @@
     .tbl-header {
       padding: 10px 16px;
       border-bottom: 1px solid var(--border2);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .tbl-label {
-      font-size: 10px; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--tx2);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--tx2);
     }
 
-    table { width: 100%; border-collapse: collapse }
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
 
     th {
       padding: 9px 14px;
@@ -722,16 +953,23 @@
       color: var(--tx1);
     }
 
-    tr:last-child td { border-bottom: none }
+    tr:last-child td {
+      border-bottom: none
+    }
 
-    tr:hover td { background: rgba(96,165,250,.025) }
+    tr:hover td {
+      background: rgba(96, 165, 250, .025)
+    }
 
     /* ── BADGE ── */
     .badge {
-      display: inline-flex; align-items: center; gap: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       padding: 2px 8px;
       border-radius: 3px;
-      font-size: 9px; font-weight: 700;
+      font-size: 9px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .06em;
       border: 1px solid;
@@ -739,17 +977,48 @@
 
     .badge::before {
       content: '';
-      width: 4px; height: 4px;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       background: currentColor;
     }
 
-    .badge.vuln    { background: rgba(255,107,107,.12); color: #ff8080; border-color: rgba(255,107,107,.25) }
-    .badge.safe    { background: rgba(52,217,128,.10); color: var(--g0); border-color: rgba(52,217,128,.22) }
-    .badge.critical{ background: rgba(255,100,100,.14); color: #ff9090; border-color: rgba(255,100,100,.30); box-shadow: 0 0 8px rgba(255,80,80,.12) }
-    .badge.high    { background: rgba(255,150,80,.12); color: #ff9f5a; border-color: rgba(255,150,80,.25) }
-    .badge.medium  { background: rgba(255,209,102,.10); color: var(--y0); border-color: rgba(255,209,102,.24) }
-    .badge.low     { background: rgba(92,184,255,.10); color: var(--c0); border-color: rgba(92,184,255,.20) }
+    .badge.vuln {
+      background: rgba(255, 107, 107, .12);
+      color: #ff8080;
+      border-color: rgba(255, 107, 107, .25)
+    }
+
+    .badge.safe {
+      background: rgba(52, 217, 128, .10);
+      color: var(--g0);
+      border-color: rgba(52, 217, 128, .22)
+    }
+
+    .badge.critical {
+      background: rgba(255, 100, 100, .14);
+      color: #ff9090;
+      border-color: rgba(255, 100, 100, .30);
+      box-shadow: 0 0 8px rgba(255, 80, 80, .12)
+    }
+
+    .badge.high {
+      background: rgba(255, 150, 80, .12);
+      color: #ff9f5a;
+      border-color: rgba(255, 150, 80, .25)
+    }
+
+    .badge.medium {
+      background: rgba(255, 209, 102, .10);
+      color: var(--y0);
+      border-color: rgba(255, 209, 102, .24)
+    }
+
+    .badge.low {
+      background: rgba(92, 184, 255, .10);
+      color: var(--c0);
+      border-color: rgba(92, 184, 255, .20)
+    }
 
     /* ── PAYLOAD CODE ── */
     .pcode {
@@ -800,57 +1069,139 @@
 
     .metric-card::after {
       content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       height: 2px;
     }
 
-    .mc-green::after  { background: linear-gradient(90deg, transparent, var(--g0), transparent) }
-    .mc-red::after    { background: linear-gradient(90deg, transparent, var(--r0), transparent) }
-    .mc-amber::after  { background: linear-gradient(90deg, transparent, var(--y0), transparent) }
-    .mc-cyan::after   { background: linear-gradient(90deg, transparent, var(--c0), transparent) }
-    .mc-blue::after   { background: linear-gradient(90deg, transparent, var(--c0), transparent) }
-    .mc-yellow::after { background: linear-gradient(90deg, transparent, var(--y0), transparent) }
-    .mc-purple::after { background: linear-gradient(90deg, transparent, #a78bfa, transparent) }
-    .mc-orange::after { background: linear-gradient(90deg, transparent, #fb923c, transparent) }
+    .mc-green::after {
+      background: linear-gradient(90deg, transparent, var(--g0), transparent)
+    }
+
+    .mc-red::after {
+      background: linear-gradient(90deg, transparent, var(--r0), transparent)
+    }
+
+    .mc-amber::after {
+      background: linear-gradient(90deg, transparent, var(--y0), transparent)
+    }
+
+    .mc-cyan::after {
+      background: linear-gradient(90deg, transparent, var(--c0), transparent)
+    }
+
+    .mc-blue::after {
+      background: linear-gradient(90deg, transparent, var(--c0), transparent)
+    }
+
+    .mc-yellow::after {
+      background: linear-gradient(90deg, transparent, var(--y0), transparent)
+    }
+
+    .mc-purple::after {
+      background: linear-gradient(90deg, transparent, #a78bfa, transparent)
+    }
+
+    .mc-orange::after {
+      background: linear-gradient(90deg, transparent, #fb923c, transparent)
+    }
 
     .metric-icon {
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 12px;
       border-radius: 6px;
       background: var(--bg2);
       font-size: 14px;
     }
 
-    .mc-green  .metric-icon { color: var(--g0) }
-    .mc-red    .metric-icon { color: var(--r0) }
-    .mc-amber  .metric-icon { color: var(--y0) }
-    .mc-cyan   .metric-icon { color: var(--c0) }
-    .mc-blue   .metric-icon { color: var(--c0) }
-    .mc-yellow .metric-icon { color: var(--y0) }
-    .mc-purple .metric-icon { color: #a78bfa }
-    .mc-orange .metric-icon { color: #fb923c }
+    .mc-green .metric-icon {
+      color: var(--g0)
+    }
 
-    .metric-icon svg { width: 16px; height: 16px }
+    .mc-red .metric-icon {
+      color: var(--r0)
+    }
+
+    .mc-amber .metric-icon {
+      color: var(--y0)
+    }
+
+    .mc-cyan .metric-icon {
+      color: var(--c0)
+    }
+
+    .mc-blue .metric-icon {
+      color: var(--c0)
+    }
+
+    .mc-yellow .metric-icon {
+      color: var(--y0)
+    }
+
+    .mc-purple .metric-icon {
+      color: #a78bfa
+    }
+
+    .mc-orange .metric-icon {
+      color: #fb923c
+    }
+
+    .metric-icon svg {
+      width: 16px;
+      height: 16px
+    }
 
     .metric-num {
       font-family: var(--mono2);
-      font-size: 30px; font-weight: 700;
+      font-size: 30px;
+      font-weight: 700;
       line-height: 1;
     }
 
-    .mc-green  .metric-num { color: var(--g0) }
-    .mc-red    .metric-num { color: var(--r0) }
-    .mc-amber  .metric-num { color: var(--y0) }
-    .mc-cyan   .metric-num { color: var(--c0) }
-    .mc-blue   .metric-num { color: var(--c0) }
-    .mc-yellow .metric-num { color: var(--y0) }
-    .mc-purple .metric-num { color: #a78bfa }
-    .mc-orange .metric-num { color: #fb923c }
+    .mc-green .metric-num {
+      color: var(--g0)
+    }
+
+    .mc-red .metric-num {
+      color: var(--r0)
+    }
+
+    .mc-amber .metric-num {
+      color: var(--y0)
+    }
+
+    .mc-cyan .metric-num {
+      color: var(--c0)
+    }
+
+    .mc-blue .metric-num {
+      color: var(--c0)
+    }
+
+    .mc-yellow .metric-num {
+      color: var(--y0)
+    }
+
+    .mc-purple .metric-num {
+      color: #a78bfa
+    }
+
+    .mc-orange .metric-num {
+      color: #fb923c
+    }
 
     .metric-lbl {
-      font-size: 10px; color: var(--tx2); margin-top: 5px;
-      text-transform: uppercase; letter-spacing: .07em;
+      font-size: 10px;
+      color: var(--tx2);
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
     }
 
     /* ── ACTION BUTTONS ── */
@@ -886,30 +1237,56 @@
       border-radius: 6px;
       padding: 24px;
       margin-bottom: 16px;
-      position: relative; overflow: hidden;
+      position: relative;
+      overflow: hidden;
     }
 
     .report-header::before {
       content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
     }
 
-    .report-header.vuln::before { background: linear-gradient(90deg, transparent, var(--r0), transparent) }
-    .report-header.safe::before { background: linear-gradient(90deg, transparent, var(--g0), transparent) }
+    .report-header.vuln::before {
+      background: linear-gradient(90deg, transparent, var(--r0), transparent)
+    }
 
-    .report-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap }
+    .report-header.safe::before {
+      background: linear-gradient(90deg, transparent, var(--g0), transparent)
+    }
 
-    .rmi { display: flex; flex-direction: column; gap: 3px }
+    .report-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+      flex-wrap: wrap
+    }
+
+    .rmi {
+      display: flex;
+      flex-direction: column;
+      gap: 3px
+    }
 
     .rmi-key {
-      font-size: 9px; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--tx3);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--tx3);
     }
 
-    .rmi-val { font-size: 12px; color: var(--tx0) }
+    .rmi-val {
+      font-size: 12px;
+      color: var(--tx0)
+    }
 
     .pdf-btn {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       padding: 7px 14px;
       background: transparent;
       border: 1px solid var(--y0);
@@ -923,8 +1300,14 @@
       transition: all .13s;
     }
 
-    .pdf-btn:hover { background: var(--y-dim) }
-    .pdf-btn svg { width: 11px; height: 11px }
+    .pdf-btn:hover {
+      background: var(--y-dim)
+    }
+
+    .pdf-btn svg {
+      width: 11px;
+      height: 11px
+    }
 
     /* ── FIX CARDS ── */
     .fix-card {
@@ -938,23 +1321,37 @@
     .fix-card-header {
       padding: 14px 18px;
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       cursor: pointer;
       transition: background .13s;
       font-size: 13px;
     }
 
-    .fix-card-header:hover { background: var(--surface) }
-
-    .fix-owasp {
-      font-size: 9px; text-transform: uppercase; letter-spacing: .07em;
-      padding: 2px 7px; border-radius: 3px;
-      background: rgba(167,139,250,.1); color: #a78bfa;
-      border: 1px solid rgba(167,139,250,.2);
+    .fix-card-header:hover {
+      background: var(--surface)
     }
 
-    .fix-body { padding: 16px 18px; display: none }
-    .fix-body.open { display: block }
+    .fix-owasp {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: rgba(167, 139, 250, .1);
+      color: #a78bfa;
+      border: 1px solid rgba(167, 139, 250, .2);
+    }
+
+    .fix-body {
+      padding: 16px 18px;
+      display: none
+    }
+
+    .fix-body.open {
+      display: block
+    }
 
     .fix-item {
       padding: 12px 14px;
@@ -965,14 +1362,26 @@
     }
 
     .fix-item-title {
-      font-size: 12px; font-weight: 600;
-      color: var(--tx0); margin-bottom: 5px;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--tx0);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .fix-item-title::before { content: '>>'; color: var(--c0); font-size: 10px }
+    .fix-item-title::before {
+      content: '>>';
+      color: var(--c0);
+      font-size: 10px
+    }
 
-    .fix-detail { font-size: 11px; color: var(--tx1); line-height: 1.65 }
+    .fix-detail {
+      font-size: 11px;
+      color: var(--tx1);
+      line-height: 1.65
+    }
 
     .fix-code {
       background: var(--bg);
@@ -983,12 +1392,20 @@
       font-size: 11px;
     }
 
-    .fix-code-bad  { color: var(--r0) }
-    .fix-code-good { color: var(--g0) }
+    .fix-code-bad {
+      color: var(--r0)
+    }
+
+    .fix-code-good {
+      color: var(--g0)
+    }
 
     .fix-code-label {
-      font-size: 9px; text-transform: uppercase;
-      letter-spacing: .07em; color: var(--tx3); margin-bottom: 4px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--tx3);
+      margin-bottom: 4px;
     }
 
     /* ── SSL GRID ── */
@@ -1004,40 +1421,81 @@
       border: 1px solid var(--border2);
       border-radius: 6px;
       padding: 14px 16px;
-      display: flex; align-items: center; gap: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .ssl-ico {
-      width: 32px; height: 32px;
+      width: 32px;
+      height: 32px;
       border: 1px solid var(--border2);
       border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
 
-    .ssl-ico svg { width: 15px; height: 15px }
+    .ssl-ico svg {
+      width: 15px;
+      height: 15px
+    }
 
-    .ssl-ico.ok   { border-color: rgba(74,222,128,.2); color: var(--g0) }
-    .ssl-ico.bad  { border-color: rgba(248,113,113,.2); color: var(--r0) }
-    .ssl-ico.warn { border-color: rgba(251,191,36,.2); color: var(--y0) }
-    .ssl-ico.info { border-color: rgba(96,165,250,.2); color: var(--c0) }
+    .ssl-ico.ok {
+      border-color: rgba(74, 222, 128, .2);
+      color: var(--g0)
+    }
 
-    .ssl-val { font-family: var(--mono2); font-size: 13px; font-weight: 700 }
-    .ssl-lbl { font-size: 10px; color: var(--tx3); margin-top: 2px; text-transform: uppercase; letter-spacing: .06em }
+    .ssl-ico.bad {
+      border-color: rgba(248, 113, 113, .2);
+      color: var(--r0)
+    }
+
+    .ssl-ico.warn {
+      border-color: rgba(251, 191, 36, .2);
+      color: var(--y0)
+    }
+
+    .ssl-ico.info {
+      border-color: rgba(96, 165, 250, .2);
+      color: var(--c0)
+    }
+
+    .ssl-val {
+      font-family: var(--mono2);
+      font-size: 13px;
+      font-weight: 700
+    }
+
+    .ssl-lbl {
+      font-size: 10px;
+      color: var(--tx3);
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: .06em
+    }
 
     .ssl-findings {
       background: var(--r-dim);
-      border: 1px solid rgba(248,113,113,.18);
-      border-radius: 5px; padding: 14px;
+      border: 1px solid rgba(248, 113, 113, .18);
+      border-radius: 5px;
+      padding: 14px;
     }
 
     .ssl-finding-item {
-      font-size: 11px; color: var(--r0);
+      font-size: 11px;
+      color: var(--r0);
       padding: 3px 0;
-      display: flex; align-items: flex-start; gap: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
     }
 
-    .ssl-finding-item::before { content: '!>'; flex-shrink: 0 }
+    .ssl-finding-item::before {
+      content: '!>';
+      flex-shrink: 0
+    }
 
     /* ── API SECURITY ── */
     .paths-area {
@@ -1058,127 +1516,225 @@
 
     .paths-area:focus {
       border-color: var(--c1);
-      box-shadow: 0 0 0 3px rgba(96,165,250,.12);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, .12);
     }
 
     .policy-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-      gap: 8px; margin-top: 10px;
+      gap: 8px;
+      margin-top: 10px;
     }
 
     .policy-item {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 11px; color: var(--tx2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--tx2);
     }
 
-    .policy-item input[type="checkbox"] { accent-color: var(--c0) }
+    .policy-item input[type="checkbox"] {
+      accent-color: var(--c0)
+    }
 
     .tool-hint {
-      font-size: 11px; color: var(--tx3); margin-top: 10px; line-height: 1.65;
+      font-size: 11px;
+      color: var(--tx3);
+      margin-top: 10px;
+      line-height: 1.65;
     }
 
     .api-endpoint-card {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 5px;
-      padding: 14px 16px; margin-bottom: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
     }
 
     .api-endpoint-path {
-      font-size: 12px; color: var(--c0); margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--c0);
+      margin-bottom: 8px;
       word-break: break-all;
     }
 
     .api-method-row {
-      display: grid; grid-template-columns: 50px 1fr;
-      gap: 8px; font-size: 11px; margin-top: 6px; align-items: start;
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 8px;
+      font-size: 11px;
+      margin-top: 6px;
+      align-items: start;
     }
 
-    .api-method-tag { font-weight: 700; color: var(--tx2) }
+    .api-method-tag {
+      font-weight: 700;
+      color: var(--tx2)
+    }
 
-    .api-flags { display: flex; flex-wrap: wrap; gap: 5px }
+    .api-flags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px
+    }
 
     .flag-chip {
-      font-size: 9px; padding: 2px 7px;
+      font-size: 9px;
+      padding: 2px 7px;
       border-radius: 3px;
-      background: var(--y-dim); color: var(--y0);
-      border: 1px solid rgba(251,191,36,.2);
+      background: var(--y-dim);
+      color: var(--y0);
+      border: 1px solid rgba(251, 191, 36, .2);
     }
 
-    .flag-chip.high { background: var(--r-dim); color: var(--r0); border-color: rgba(248,113,113,.22) }
-    .flag-chip.ok   { background: var(--g-dim); color: var(--g0); border-color: rgba(74,222,128,.2) }
+    .flag-chip.high {
+      background: var(--r-dim);
+      color: var(--r0);
+      border-color: rgba(248, 113, 113, .22)
+    }
+
+    .flag-chip.ok {
+      background: var(--g-dim);
+      color: var(--g0);
+      border-color: rgba(74, 222, 128, .2)
+    }
 
     /* ── PORT SCANNER ── */
     .port-row {
       display: grid;
       grid-template-columns: 64px 130px 120px 1fr auto;
-      gap: 14px; align-items: center;
+      gap: 14px;
+      align-items: center;
       padding: 10px 14px;
       border-bottom: 1px solid var(--border);
       font-size: 11px;
       transition: background .1s;
     }
 
-    .port-row:last-child { border-bottom: none }
-    .port-row:hover { background: rgba(96,165,250,.025) }
+    .port-row:last-child {
+      border-bottom: none
+    }
+
+    .port-row:hover {
+      background: rgba(96, 165, 250, .025)
+    }
 
     .port-num {
-      font-family: var(--mono2); font-size: 13px; font-weight: 700; color: var(--c0);
+      font-family: var(--mono2);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c0);
     }
 
-    .port-service { color: var(--tx1); font-size: 12px }
-    .port-desc    { color: var(--tx2); font-size: 11px }
+    .port-service {
+      color: var(--tx1);
+      font-size: 12px
+    }
 
-    .port-status-open     { color: var(--r0); font-weight: 700 }
-    .port-status-closed   { color: var(--tx3) }
-    .port-status-filtered { color: var(--y0) }
+    .port-desc {
+      color: var(--tx2);
+      font-size: 11px
+    }
+
+    .port-status-open {
+      color: var(--r0);
+      font-weight: 700
+    }
+
+    .port-status-closed {
+      color: var(--tx3)
+    }
+
+    .port-status-filtered {
+      color: var(--y0)
+    }
 
     /* ── PASSWORD METER ── */
-    .pw-meter-wrap { margin: 18px 0 }
-
-    .pw-meter-label {
-      display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px;
+    .pw-meter-wrap {
+      margin: 18px 0
     }
 
-    .pw-meter-name { font-size: 12px; font-weight: 600 }
+    .pw-meter-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 7px;
+    }
+
+    .pw-meter-name {
+      font-size: 12px;
+      font-weight: 600
+    }
 
     .pw-meter-score {
-      font-family: var(--mono2); font-size: 20px; font-weight: 700;
+      font-family: var(--mono2);
+      font-size: 20px;
+      font-weight: 700;
     }
 
     .pw-meter-track {
-      height: 6px; border-radius: 3px;
-      background: var(--surface); overflow: hidden;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--surface);
+      overflow: hidden;
       border: 1px solid var(--border);
     }
 
     .pw-meter-fill {
-      height: 100%; transition: width .45s ease, background .3s; width: 0%;
+      height: 100%;
+      transition: width .45s ease, background .3s;
+      width: 0%;
     }
 
-    .pw-meter-fill.m-0 { background: var(--r0) }
-    .pw-meter-fill.m-1 { background: linear-gradient(90deg, var(--r0), var(--y0)) }
-    .pw-meter-fill.m-2 { background: linear-gradient(90deg, var(--y0), var(--c0)) }
-    .pw-meter-fill.m-3 { background: linear-gradient(90deg, var(--c0), var(--g0)) }
-    .pw-meter-fill.m-4 { background: var(--g0) }
+    .pw-meter-fill.m-0 {
+      background: var(--r0)
+    }
+
+    .pw-meter-fill.m-1 {
+      background: linear-gradient(90deg, var(--r0), var(--y0))
+    }
+
+    .pw-meter-fill.m-2 {
+      background: linear-gradient(90deg, var(--y0), var(--c0))
+    }
+
+    .pw-meter-fill.m-3 {
+      background: linear-gradient(90deg, var(--c0), var(--g0))
+    }
+
+    .pw-meter-fill.m-4 {
+      background: var(--g0)
+    }
 
     .pw-check-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 7px; margin-top: 14px;
+      gap: 7px;
+      margin-top: 14px;
     }
 
     .pw-check {
-      font-size: 11px; padding: 7px 10px;
+      font-size: 11px;
+      padding: 7px 10px;
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 3px;
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .pw-check.ok  { border-color: rgba(74,222,128,.2); color: var(--g0) }
-    .pw-check.bad { border-color: rgba(248,113,113,.2); color: var(--r0) }
+    .pw-check.ok {
+      border-color: rgba(74, 222, 128, .2);
+      color: var(--g0)
+    }
+
+    .pw-check.bad {
+      border-color: rgba(248, 113, 113, .2);
+      color: var(--r0)
+    }
 
     /* ── SIMULATION ── */
     .sim-card {
@@ -1192,32 +1748,49 @@
     .sim-header {
       padding: 12px 18px;
       border-bottom: 1px solid var(--border2);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .sim-title {
-      font-size: 10px; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--tx2);
-      display: flex; align-items: center; gap: 8px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--tx2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .sim-title::before {
       content: '';
-      width: 3px; height: 12px;
+      width: 3px;
+      height: 12px;
       background: var(--r0);
       border-radius: 2px;
     }
 
     .sim-body {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
     }
 
-    .sim-panel { padding: 16px 18px }
-    .sim-panel:first-child { border-right: 1px solid var(--border2) }
+    .sim-panel {
+      padding: 16px 18px
+    }
+
+    .sim-panel:first-child {
+      border-right: 1px solid var(--border2)
+    }
 
     .sim-panel-title {
-      font-size: 9px; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--tx3); margin-bottom: 10px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--tx3);
+      margin-bottom: 10px;
     }
 
     .sim-query {
@@ -1225,25 +1798,46 @@
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 11px 14px;
-      font-size: 11px; line-height: 1.9;
-      white-space: pre-wrap; word-break: break-all;
+      font-size: 11px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+      word-break: break-all;
       min-height: 76px;
     }
 
-    .sim-normal { color: var(--tx1) }
-    .sim-inject { color: var(--r0); font-weight: 700 }
+    .sim-normal {
+      color: var(--tx1)
+    }
+
+    .sim-inject {
+      color: var(--r0);
+      font-weight: 700
+    }
 
     .sim-response {
-      background: var(--bg); border: 1px solid var(--border);
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 11px 14px; font-size: 11px; line-height: 1.9;
+      padding: 11px 14px;
+      font-size: 11px;
+      line-height: 1.9;
       min-height: 76px;
     }
 
-    .sim-ok  { color: var(--g0) }
-    .sim-err { color: var(--r0) }
+    .sim-ok {
+      color: var(--g0)
+    }
 
-    .sim-selector { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap }
+    .sim-err {
+      color: var(--r0)
+    }
+
+    .sim-selector {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap
+    }
 
     .sim-pick {
       padding: 5px 12px;
@@ -1260,7 +1854,7 @@
 
     .sim-pick.active {
       background: var(--r-dim);
-      border-color: rgba(248,113,113,.22);
+      border-color: rgba(248, 113, 113, .22);
       color: var(--r0);
     }
 
@@ -1281,36 +1875,61 @@
 
     select:focus {
       border-color: var(--c1);
-      box-shadow: 0 0 0 3px rgba(96,165,250,.12);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, .12);
     }
-    option { background: var(--bg2) }
+
+    option {
+      background: var(--bg2)
+    }
 
     /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 5px; height: 5px }
-    ::-webkit-scrollbar-track { background: var(--bg2) }
-    ::-webkit-scrollbar-thumb { background: var(--border3); border-radius: 3px }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2)
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border3);
+      border-radius: 3px
+    }
 
     /* ── TOAST ── */
     .toast {
-      position: fixed; bottom: 24px; right: 24px;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
       z-index: 9998;
       background: var(--panel);
       border: 1px solid var(--border3);
       border-left: 3px solid var(--c0);
       padding: 12px 18px;
       border-radius: 5px;
-      font-size: 12px; font-family: var(--mono2);
+      font-size: 12px;
+      font-family: var(--mono2);
       display: none;
-      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .4);
       animation: slideIn .2s ease;
       color: var(--tx0);
     }
 
-    .toast.show { display: block }
+    .toast.show {
+      display: block
+    }
 
     @keyframes slideIn {
-      from { transform: translateX(16px); opacity: 0 }
-      to   { opacity: 1; transform: none }
+      from {
+        transform: translateX(16px);
+        opacity: 0
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
     }
 
     /* ── EMPTY STATE ── */
@@ -1320,67 +1939,126 @@
       color: var(--tx3);
     }
 
-    .empty svg { width: 30px; height: 30px; opacity: .2; margin-bottom: 10px }
-    .empty p { font-size: 12px }
+    .empty svg {
+      width: 30px;
+      height: 30px;
+      opacity: .2;
+      margin-bottom: 10px
+    }
+
+    .empty p {
+      font-size: 12px
+    }
 
     /* ── DASHBOARD ── */
     .dash-section-label {
-      font-size: 10px; text-transform: uppercase;
-      letter-spacing: .14em; color: var(--tx3);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--tx3);
       margin: 24px 0 10px;
       font-weight: 500;
     }
 
     .dash-chart-hint {
-      font-size: 11px; color: var(--tx2); margin: -2px 0 12px; line-height: 1.6;
+      font-size: 11px;
+      color: var(--tx2);
+      margin: -2px 0 12px;
+      line-height: 1.6;
     }
 
-    .dash-chart-card canvas { width: 100%; display: block }
+    .dash-chart-card canvas {
+      width: 100%;
+      display: block
+    }
 
-    .dash-mini-table { width: 100%; font-size: 12px; border-collapse: collapse }
+    .dash-mini-table {
+      width: 100%;
+      font-size: 12px;
+      border-collapse: collapse
+    }
 
     .dash-mini-table th {
-      text-align: left; padding: 8px 10px; font-size: 9px;
-      text-transform: uppercase; letter-spacing: .07em;
-      color: var(--tx3); border-bottom: 1px solid var(--border);
+      text-align: left;
+      padding: 8px 10px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--tx3);
+      border-bottom: 1px solid var(--border);
     }
 
     .dash-mini-table td {
       padding: 9px 10px;
       border-bottom: 1px solid var(--border);
-      color: var(--tx1); vertical-align: top;
+      color: var(--tx1);
+      vertical-align: top;
     }
 
-    .dash-mini-table tr:last-child td { border-bottom: none }
+    .dash-mini-table tr:last-child td {
+      border-bottom: none
+    }
 
     .dash-mod-pill {
-      display: inline-block; font-size: 10px;
-      padding: 2px 8px; border-radius: 3px; font-weight: 600;
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 600;
     }
 
-    .dash-mod-ssl    { background: var(--c-dim); color: var(--c0) }
-    .dash-mod-api    { background: var(--g-dim); color: var(--g0) }
-    .dash-mod-port   { background: rgba(251,146,60,.1); color: #fb923c }
-    .dash-mod-custom { background: rgba(167,139,250,.1); color: #a78bfa }
+    .dash-mod-ssl {
+      background: var(--c-dim);
+      color: var(--c0)
+    }
+
+    .dash-mod-api {
+      background: var(--g-dim);
+      color: var(--g0)
+    }
+
+    .dash-mod-port {
+      background: rgba(251, 146, 60, .1);
+      color: #fb923c
+    }
+
+    .dash-mod-custom {
+      background: rgba(167, 139, 250, .1);
+      color: #a78bfa
+    }
 
     /* ── GUIDE ── */
-    .guide-wrap { max-width: 980px }
+    .guide-wrap {
+      max-width: 980px
+    }
 
     .guide-lead {
-      font-size: 13px; color: var(--tx1); line-height: 1.8; margin-bottom: 20px;
-      background: var(--panel); border: 1px solid var(--border2);
+      font-size: 13px;
+      color: var(--tx1);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border2);
       border-left: 3px solid var(--c0);
       border-radius: 0 5px 5px 0;
       padding: 16px 20px;
     }
 
-    .guide-section { margin-bottom: 28px; scroll-margin-top: 20px }
+    .guide-section {
+      margin-bottom: 28px;
+      scroll-margin-top: 20px
+    }
 
     .guide-section h3 {
-      font-size: 14px; font-weight: 700;
-      margin-bottom: 10px; color: var(--tx0);
-      font-family: var(--mono2); letter-spacing: .02em;
-      display: flex; align-items: center; gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--tx0);
+      font-family: var(--mono2);
+      letter-spacing: .02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .guide-section h3::before {
@@ -1390,28 +2068,45 @@
       opacity: .8;
     }
 
-    .guide-section p, .guide-section li {
-      font-size: 12px; color: var(--tx1); line-height: 1.8; margin-bottom: 10px;
+    .guide-section p,
+    .guide-section li {
+      font-size: 12px;
+      color: var(--tx1);
+      line-height: 1.8;
+      margin-bottom: 10px;
     }
 
-    .guide-section ul { margin: 8px 0 12px 18px; padding: 0 }
-    .guide-section li { margin-bottom: 5px }
+    .guide-section ul {
+      margin: 8px 0 12px 18px;
+      padding: 0
+    }
+
+    .guide-section li {
+      margin-bottom: 5px
+    }
 
     .guide-toc {
-      display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 14px 0 24px;
     }
 
     .guide-toc a {
-      font-size: 11px; color: var(--c0); text-decoration: none;
-      border: 1px solid rgba(96,165,250,.2);
-      padding: 5px 12px; border-radius: 4px;
+      font-size: 11px;
+      color: var(--c0);
+      text-decoration: none;
+      border: 1px solid rgba(96, 165, 250, .2);
+      padding: 5px 12px;
+      border-radius: 4px;
       transition: all .13s;
       font-family: var(--mono2);
       background: var(--c-dim);
     }
 
     .guide-toc a:hover {
-      background: rgba(96,165,250,.14); border-color: rgba(96,165,250,.35);
+      background: rgba(96, 165, 250, .14);
+      border-color: rgba(96, 165, 250, .35);
     }
 
     .guide-table-wrap {
@@ -1422,29 +2117,46 @@
       background: var(--panel);
     }
 
-    .guide-table { width: 100%; border-collapse: collapse; font-size: 11px }
+    .guide-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px
+    }
 
     .guide-table th {
-      text-align: left; padding: 10px 14px;
-      background: var(--bg2); color: var(--tx1);
-      font-size: 9px; text-transform: uppercase; letter-spacing: .08em;
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--bg2);
+      color: var(--tx1);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
       border-bottom: 1px solid var(--border2);
       white-space: nowrap;
     }
 
     .guide-table td {
       padding: 10px 14px;
-      border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--tx1);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      color: var(--tx1);
       font-size: 12px;
     }
 
-    .guide-table tr:last-child td { border-bottom: none }
-    .guide-table code { font-size: 11px; color: var(--c0) }
+    .guide-table tr:last-child td {
+      border-bottom: none
+    }
+
+    .guide-table code {
+      font-size: 11px;
+      color: var(--c0)
+    }
 
     .guide-use-btn {
-      font-size: 10px; padding: 6px 12px;
+      font-size: 10px;
+      padding: 6px 12px;
       border-radius: 4px;
-      border: 1px solid rgba(74,222,128,.25);
+      border: 1px solid rgba(74, 222, 128, .25);
       background: var(--g-dim);
       color: var(--g0);
       cursor: pointer;
@@ -1455,21 +2167,27 @@
     }
 
     .guide-use-btn:hover {
-      background: rgba(74,222,128,.14);
-      border-color: rgba(74,222,128,.4);
+      background: rgba(74, 222, 128, .14);
+      border-color: rgba(74, 222, 128, .4);
     }
 
     .guide-note {
-      margin-top: 14px; padding: 14px 18px;
+      margin-top: 14px;
+      padding: 14px 18px;
       background: var(--y-dim);
-      border: 1px solid rgba(251,191,36,.2);
-      border-radius: 5px; font-size: 11px;
-      color: var(--tx1); line-height: 1.7;
+      border: 1px solid rgba(251, 191, 36, .2);
+      border-radius: 5px;
+      font-size: 11px;
+      color: var(--tx1);
+      line-height: 1.7;
     }
 
     .guide-kicker {
-      font-size: 9px; text-transform: uppercase;
-      letter-spacing: .12em; color: var(--tx3); margin-bottom: 6px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--tx3);
+      margin-bottom: 6px;
     }
 
     /* ── EXPANDABLE MODULE STEPS ── */
@@ -1484,7 +2202,9 @@
     .module-step-header {
       padding: 12px 16px;
       cursor: pointer;
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-size: 12px;
       color: var(--tx0);
       font-weight: 500;
@@ -1492,13 +2212,17 @@
       user-select: none;
     }
 
-    .module-step-header:hover { background: var(--surface) }
+    .module-step-header:hover {
+      background: var(--surface)
+    }
 
     .module-step-header .step-badge {
-      font-size: 9px; padding: 2px 8px;
+      font-size: 9px;
+      padding: 2px 8px;
       border-radius: 3px;
-      background: var(--c-dim); color: var(--c0);
-      border: 1px solid rgba(96,165,250,.18);
+      background: var(--c-dim);
+      color: var(--c0);
+      border: 1px solid rgba(96, 165, 250, .18);
     }
 
     .module-steps-body {
@@ -1507,124 +2231,373 @@
       border-top: 1px solid var(--border);
     }
 
-    .module-steps-body.open { display: block }
+    .module-steps-body.open {
+      display: block
+    }
 
     .module-step-item {
-      display: flex; gap: 12px;
+      display: flex;
+      gap: 12px;
       margin-bottom: 12px;
-      font-size: 12px; color: var(--tx1);
+      font-size: 12px;
+      color: var(--tx1);
       line-height: 1.65;
     }
 
     .module-step-num {
-      width: 22px; height: 22px; flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
       border-radius: 3px;
-      background: var(--c-dim); color: var(--c0);
-      border: 1px solid rgba(96,165,250,.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 700;
+      background: var(--c-dim);
+      color: var(--c0);
+      border: 1px solid rgba(96, 165, 250, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
     }
 
     /* ── LEGACY ALIASES (JS-generated HTML) ── */
-    .card { background:var(--panel); border:1px solid var(--border2); border-radius:6px; padding:18px; margin-bottom:16px; position:relative; overflow:hidden }
-    .card+.card { margin-top:14px }
-    .card-title {
-      font-size:10px; text-transform:uppercase; letter-spacing:.12em;
-      color:var(--tx2); margin-bottom:14px;
-      display:flex; align-items:center; gap:8px;
-      font-family:var(--mono2); font-weight:500;
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 18px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden
     }
-    .card-title::before { content:'//'; color:var(--c0); font-size:10px }
-    .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px }
-    .scanner-wrap { background:var(--panel); border:1px solid var(--border2); border-radius:6px; padding:24px; margin-bottom:16px; position:relative; overflow:hidden }
-    .hist-wrap { background:var(--panel); border:1px solid var(--border2); border-radius:6px; overflow:hidden }
-    .pl-wrap { background:var(--panel); border:1px solid var(--border2); border-radius:6px; overflow:hidden }
-    .tbl-wrap { background:var(--panel); border:1px solid var(--border2); border-radius:6px; overflow:hidden }
+
+    .card+.card {
+      margin-top: 14px
+    }
+
+    .card-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--tx2);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono2);
+      font-weight: 500;
+    }
+
+    .card-title::before {
+      content: '//';
+      color: var(--c0);
+      font-size: 10px
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 16px
+    }
+
+    .scanner-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .hist-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      overflow: hidden
+    }
+
+    .pl-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      overflow: hidden
+    }
+
+    .tbl-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      overflow: hidden
+    }
 
     .scan-btn {
-      display:inline-flex; align-items:center; gap:7px;
-      padding:10px 20px;
-      background:transparent;
-      border:1px solid var(--g2);
-      border-radius:5px;
-      color:var(--g0);
-      font-family:var(--mono2);
-      font-size:11px;
-      font-weight:500;
-      letter-spacing:.06em;
-      cursor:pointer;
-      transition:all .13s;
-      white-space:nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--g2);
+      border-radius: 5px;
+      color: var(--g0);
+      font-family: var(--mono2);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: all .13s;
+      white-space: nowrap;
     }
-    .scan-btn:hover:not(:disabled) { background:var(--g-dim); border-color:var(--g0) }
-    .scan-btn:disabled { opacity:.35; cursor:not-allowed }
-    .scan-btn svg { width:12px; height:12px }
+
+    .scan-btn:hover:not(:disabled) {
+      background: var(--g-dim);
+      border-color: var(--g0)
+    }
+
+    .scan-btn:disabled {
+      opacity: .35;
+      cursor: not-allowed
+    }
+
+    .scan-btn svg {
+      width: 12px;
+      height: 12px
+    }
 
     .ts-btn {
-      padding:5px 12px;
-      border-radius:4px;
-      border:1px solid var(--border2);
-      background:transparent;
-      color:var(--tx2);
-      font-size:10px;
-      font-family:var(--mono2);
-      cursor:pointer;
-      transition:all .13s;
-      letter-spacing:.04em;
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--tx2);
+      font-size: 10px;
+      font-family: var(--mono2);
+      cursor: pointer;
+      transition: all .13s;
+      letter-spacing: .04em;
     }
-    .ts-btn:hover { color:var(--c0); border-color:rgba(96,165,250,.3) }
 
-    .ts-chip { display:flex; align-items:center; gap:9px; padding:8px 11px; background:var(--bg2); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:all .13s; user-select:none }
-    .ts-chip:hover { border-color:var(--border3); background:var(--surface) }
-    .ts-chip.selected { background:var(--g-dim); border-color:rgba(74,222,128,.25) }
-    .ts-chip-check { width:13px; height:13px; border:1px solid var(--border2); border-radius:2px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .13s; font-size:9px; color:transparent }
-    .ts-chip.selected .ts-chip-check { background:var(--g0); border-color:var(--g0); color:var(--bg) }
-    .ts-chip.selected .ts-chip-check::after { content:'x'; font-size:8px; color:var(--bg); font-weight:700 }
-    .ts-chip-label { font-size:11px; color:var(--tx1); font-family:var(--mono2) }
-    .ts-chip.selected .ts-chip-label { color:var(--g0) }
-    .ts-chip-count { margin-left:auto; font-size:10px; color:var(--tx3) }
-    .ts-controls { display:flex; gap:7px; margin-bottom:12px }
+    .ts-btn:hover {
+      color: var(--c0);
+      border-color: rgba(96, 165, 250, .3)
+    }
 
-    .guide-use-cell { white-space:nowrap }
+    .ts-chip {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 11px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all .13s;
+      user-select: none
+    }
 
-    .dash-section-label { font-size:10px; text-transform:uppercase; letter-spacing:.14em; color:var(--tx3); margin:24px 0 10px }
+    .ts-chip:hover {
+      border-color: var(--border3);
+      background: var(--surface)
+    }
 
-    .progress-area { display:none; margin-top:14px }
-    .progress-area.show { display:block }
+    .ts-chip.selected {
+      background: var(--g-dim);
+      border-color: rgba(74, 222, 128, .25)
+    }
 
-    .url-label { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--tx2); display:block; margin-bottom:7px }
-    .url-row { display:flex; gap:10px; align-items:flex-end }
-    .url-field { flex:1; display:flex; align-items:center; background:var(--bg2); border:1px solid var(--border2); border-radius:5px; transition:border-color .15s, box-shadow .15s; overflow:hidden }
-    .url-field:focus-within { border-color:var(--c1); box-shadow:0 0 0 3px rgba(96,165,250,.12) }
-    .url-field-icon { padding:0 12px; color:var(--tx3); display:flex; flex-shrink:0 }
-    .url-field-icon svg { width:13px; height:13px }
-    .url-input { flex:1; padding:11px 12px 11px 0; background:transparent; border:none; color:var(--tx0); font-family:var(--mono); font-size:13px; outline:none }
-    .url-input::placeholder { color:var(--tx3) }
+    .ts-chip-check {
+      width: 13px;
+      height: 13px;
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .13s;
+      font-size: 9px;
+      color: transparent
+    }
 
-    .metric-card { background:var(--panel); border:1px solid var(--border2); border-radius:6px; padding:18px; position:relative; overflow:hidden }
-    .metric-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px }
+    .ts-chip.selected .ts-chip-check {
+      background: var(--g0);
+      border-color: var(--g0);
+      color: var(--bg)
+    }
+
+    .ts-chip.selected .ts-chip-check::after {
+      content: 'x';
+      font-size: 8px;
+      color: var(--bg);
+      font-weight: 700
+    }
+
+    .ts-chip-label {
+      font-size: 11px;
+      color: var(--tx1);
+      font-family: var(--mono2)
+    }
+
+    .ts-chip.selected .ts-chip-label {
+      color: var(--g0)
+    }
+
+    .ts-chip-count {
+      margin-left: auto;
+      font-size: 10px;
+      color: var(--tx3)
+    }
+
+    .ts-controls {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 12px
+    }
+
+    .guide-use-cell {
+      white-space: nowrap
+    }
+
+    .dash-section-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--tx3);
+      margin: 24px 0 10px
+    }
+
+    .progress-area {
+      display: none;
+      margin-top: 14px
+    }
+
+    .progress-area.show {
+      display: block
+    }
+
+    .url-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--tx2);
+      display: block;
+      margin-bottom: 7px
+    }
+
+    .url-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end
+    }
+
+    .url-field {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 5px;
+      transition: border-color .15s, box-shadow .15s;
+      overflow: hidden
+    }
+
+    .url-field:focus-within {
+      border-color: var(--c1);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, .12)
+    }
+
+    .url-field-icon {
+      padding: 0 12px;
+      color: var(--tx3);
+      display: flex;
+      flex-shrink: 0
+    }
+
+    .url-field-icon svg {
+      width: 13px;
+      height: 13px
+    }
+
+    .url-input {
+      flex: 1;
+      padding: 11px 12px 11px 0;
+      background: transparent;
+      border: none;
+      color: var(--tx0);
+      font-family: var(--mono);
+      font-size: 13px;
+      outline: none
+    }
+
+    .url-input::placeholder {
+      color: var(--tx3)
+    }
+
+    .metric-card {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .metric-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1100px) {
-      .dash-grid-8 { grid-template-columns: repeat(2, 1fr) }
+      .dash-grid-8 {
+        grid-template-columns: repeat(2, 1fr)
+      }
     }
 
     @media (max-width: 900px) {
-      .stat-grid { grid-template-columns: repeat(2, 1fr) }
-      .grid-2    { grid-template-columns: 1fr }
-      .sim-body  { grid-template-columns: 1fr }
-      .sim-panel:first-child { border-right: none; border-bottom: 1px solid var(--border2) }
+      .stat-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr
+      }
+
+      .sim-body {
+        grid-template-columns: 1fr
+      }
+
+      .sim-panel:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border2)
+      }
     }
 
     @media (max-width: 700px) {
-      .sidebar { width: 52px }
-      .sidebar .logo-name, .sidebar .logo-ver,
-      .sidebar .nav-link span, .sidebar .nav-section,
-      .sidebar-foot .sf-row span { display: none }
-      .main { margin-left: 52px; padding: 22px 18px }
+      .sidebar {
+        width: 52px
+      }
+
+      .sidebar .logo-name,
+      .sidebar .logo-ver,
+      .sidebar .nav-link span,
+      .sidebar .nav-section,
+      .sidebar-foot .sf-row span {
+        display: none
+      }
+
+      .main {
+        margin-left: 52px;
+        padding: 22px 18px
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- ══ SIDEBAR ══ -->
@@ -1657,7 +2630,7 @@
       </div>
       <div class="nav-link" data-page="custom-tests">
         <span class="nav-prefix">&gt;</span>
-        <span>Custom Tests</span>
+        <!-- <span>Custom Tests</span> -->
       </div>
 
       <div class="nav-section">// INTEL</div>
@@ -1712,10 +2685,13 @@
           <div class="input-row">
             <div class="tinput-wrap">
               <span class="tinput-prompt">$&gt;</span>
-              <input class="tinput" id="targetUrl" type="text" placeholder="https://example.com/page?id=1&cat=electronics">
+              <input class="tinput" id="targetUrl" type="text"
+                placeholder="https://example.com/page?id=1&cat=electronics">
             </div>
             <button class="tbtn" id="scanBtn" onclick="startScan()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
               RUN SCAN
             </button>
           </div>
@@ -1744,7 +2720,9 @@
               <span class="progress-label" id="progressLabel">Initializing…</span>
               <span class="progress-pct" id="progressPct">0%</span>
             </div>
-            <div class="pbar-bg"><div class="pbar-fill" id="pbarFill"></div></div>
+            <div class="pbar-bg">
+              <div class="pbar-fill" id="pbarFill"></div>
+            </div>
             <div class="steps-row" id="stepsRow"></div>
             <div class="live-log" id="liveLog"></div>
           </div>
@@ -1788,25 +2766,30 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
             <div>
               <label class="tinput-label">Test Name *</label>
-              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctName" type="text" placeholder="e.g. Login SQL Bypass"></div>
+              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctName"
+                  type="text" placeholder="e.g. Login SQL Bypass"></div>
             </div>
             <div>
               <label class="tinput-label">Category</label>
-              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctCategory" type="text" placeholder="e.g. SQL Injection"></div>
+              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctCategory"
+                  type="text" placeholder="e.g. SQL Injection"></div>
             </div>
           </div>
           <div style="margin-bottom:12px">
             <label class="tinput-label">Target URL *</label>
-            <div class="tinput-wrap"><span class="tinput-prompt">$&gt;</span><input class="tinput" id="ctUrl" type="text" placeholder="https://example.com/login?id=1"></div>
+            <div class="tinput-wrap"><span class="tinput-prompt">$&gt;</span><input class="tinput" id="ctUrl"
+                type="text" placeholder="https://example.com/login?id=1"></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
             <div>
               <label class="tinput-label">Payload</label>
-              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctPayload" type="text" placeholder="' OR 1=1 --"></div>
+              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctPayload"
+                  type="text" placeholder="' OR 1=1 --"></div>
             </div>
             <div>
               <label class="tinput-label">Description</label>
-              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctDesc" type="text" placeholder="What this test checks"></div>
+              <div class="tinput-wrap"><span class="tinput-prompt">&gt;</span><input class="tinput" id="ctDesc"
+                  type="text" placeholder="What this test checks"></div>
             </div>
           </div>
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
@@ -1823,7 +2806,10 @@
                 style="width:72px;padding:7px 8px;background:var(--bg2);border:1px solid var(--border2);border-radius:2px;color:var(--tx0);font-family:var(--mono);font-size:11px;outline:none">
             </div>
             <button class="tbtn" style="margin-left:auto" onclick="saveCustomTest()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
               SAVE TEST
             </button>
           </div>
@@ -1840,7 +2826,11 @@
         </div>
         <div class="tpanel-body">
           <div id="customTestList">
-            <div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg><p>No custom tests yet. Add one above.</p></div>
+            <div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+              </svg>
+              <p>No custom tests yet. Add one above.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1851,23 +2841,32 @@
       <div class="ph">
         <div class="ph-breadcrumb">INTEL / GUIDE</div>
         <div class="ph-title">Help &amp; Documentation</div>
-        <div class="ph-sub">Complete reference for all Pro Scanner modules — setup, usage, interpretation, and remediation guidance.</div>
+        <div class="ph-sub">Complete reference for all Pro Scanner modules — setup, usage, interpretation, and
+          remediation guidance.</div>
       </div>
 
       <div class="guide-wrap">
 
         <!-- ALERT BANNER -->
-        <div style="display:flex;align-items:flex-start;gap:14px;padding:16px 20px;background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.2);border-radius:6px;margin-bottom:24px">
+        <div
+          style="display:flex;align-items:flex-start;gap:14px;padding:16px 20px;background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.2);border-radius:6px;margin-bottom:24px">
           <div style="color:var(--y0);font-size:18px;flex-shrink:0;margin-top:1px">&#9888;</div>
           <div>
-            <div style="font-size:12px;font-weight:700;color:var(--y0);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Authorized Use Only</div>
-            <div style="font-size:12px;color:var(--tx1);line-height:1.75">Pro Scanner is a <strong>professional security assessment tool</strong>. You must have explicit written permission before scanning any target. Unauthorized scanning may violate computer fraud laws in your jurisdiction. Only test systems you own or have been authorized to assess.</div>
+            <div
+              style="font-size:12px;font-weight:700;color:var(--y0);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">
+              Authorized Use Only</div>
+            <div style="font-size:12px;color:var(--tx1);line-height:1.75">Pro Scanner is a <strong>professional security
+                assessment tool</strong>. You must have explicit written permission before scanning any target.
+              Unauthorized scanning may violate computer fraud laws in your jurisdiction. Only test systems you own or
+              have been authorized to assess.</div>
           </div>
         </div>
 
         <!-- QUICK NAV -->
         <div style="margin-bottom:28px">
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--tx3);margin-bottom:10px;font-weight:600">Quick Navigation</div>
+          <div
+            style="font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--tx3);margin-bottom:10px;font-weight:600">
+            Quick Navigation</div>
           <nav class="guide-toc" aria-label="Guide sections">
             <a href="#guide-overview">Overview</a>
             <a href="#guide-setup">Setup &amp; Backend</a>
@@ -1884,28 +2883,41 @@
         <!-- OVERVIEW -->
         <section class="guide-section" id="guide-overview">
           <h3>What is Pro Scanner?</h3>
-          <p>Pro Scanner is a <strong>local-first web security assessment platform</strong>. The browser UI communicates exclusively with a Python backend running on your machine at <code style="color:var(--c0);font-family:var(--mono);font-size:11px">localhost:8765</code>. No scan data, credentials, or target information is transmitted to external servers.</p>
-          <p>The platform automates the most common categories of web vulnerability detection: injection flaws, TLS/certificate misconfigurations, API exposure, and network surface mapping. Results are heuristic signals — always validate manually before treating findings as confirmed vulnerabilities.</p>
+          <p>Pro Scanner is a <strong>local-first web security assessment platform</strong>. The browser UI communicates
+            exclusively with a Python backend running on your machine at <code
+              style="color:var(--c0);font-family:var(--mono);font-size:11px">localhost:8765</code>. No scan data,
+            credentials, or target information is transmitted to external servers.</p>
+          <p>The platform automates the most common categories of web vulnerability detection: injection flaws,
+            TLS/certificate misconfigurations, API exposure, and network surface mapping. Results are heuristic signals
+            — always validate manually before treating findings as confirmed vulnerabilities.</p>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px">
-            <div style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid var(--c0)">
+            <div
+              style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid var(--c0)">
               <div style="font-size:20px;margin-bottom:8px">&#128269;</div>
               <div style="font-size:11px;font-weight:700;color:var(--tx0);margin-bottom:4px">Vulnerability Scanner</div>
-              <div style="font-size:10px;color:var(--tx2);line-height:1.6">SQLi, XSS, path traversal, SSRF against parameterized URLs</div>
+              <div style="font-size:10px;color:var(--tx2);line-height:1.6">SQLi, XSS, path traversal, SSRF against
+                parameterized URLs</div>
             </div>
-            <div style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid var(--g0)">
+            <div
+              style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid var(--g0)">
               <div style="font-size:20px;margin-bottom:8px">&#128274;</div>
               <div style="font-size:11px;font-weight:700;color:var(--tx0);margin-bottom:4px">SSL / TLS Checker</div>
-              <div style="font-size:10px;color:var(--tx2);line-height:1.6">Certificate validity, TLS version, HSTS, redirect chains</div>
+              <div style="font-size:10px;color:var(--tx2);line-height:1.6">Certificate validity, TLS version, HSTS,
+                redirect chains</div>
             </div>
-            <div style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid var(--y0)">
+            <div
+              style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid var(--y0)">
               <div style="font-size:20px;margin-bottom:8px">&#9889;</div>
               <div style="font-size:11px;font-weight:700;color:var(--tx0);margin-bottom:4px">API Scanner</div>
-              <div style="font-size:10px;color:var(--tx2);line-height:1.6">REST/GraphQL probing, CORS misconfiguration, data exposure</div>
+              <div style="font-size:10px;color:var(--tx2);line-height:1.6">REST/GraphQL probing, CORS misconfiguration,
+                data exposure</div>
             </div>
-            <div style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid #a78bfa">
+            <div
+              style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:14px;border-top:2px solid #a78bfa">
               <div style="font-size:20px;margin-bottom:8px">&#127758;</div>
               <div style="font-size:11px;font-weight:700;color:var(--tx0);margin-bottom:4px">Port Scanner</div>
-              <div style="font-size:10px;color:var(--tx2);line-height:1.6">Network surface mapping, service ID, risk classification</div>
+              <div style="font-size:10px;color:var(--tx2);line-height:1.6">Network surface mapping, service ID, risk
+                classification</div>
             </div>
           </div>
         </section>
@@ -1913,25 +2925,44 @@
         <!-- SETUP -->
         <section class="guide-section" id="guide-setup">
           <h3>Setup &amp; Backend Connection</h3>
-          <p>Before using any scan module, the Python backend must be running. The status indicator in the bottom-left sidebar shows real-time connection state.</p>
-          <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:16px 20px;margin:14px 0">
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);margin-bottom:10px">Starting the backend</div>
+          <p>Before using any scan module, the Python backend must be running. The status indicator in the bottom-left
+            sidebar shows real-time connection state.</p>
+          <div
+            style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:16px 20px;margin:14px 0">
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);margin-bottom:10px">
+              Starting the backend</div>
             <div style="font-family:var(--mono);font-size:12px;color:var(--g0);line-height:2">
               <span style="color:var(--tx3)">$</span> python backend.py<br>
               <span style="color:var(--tx3);font-size:10px"># Server starts on http://localhost:8765</span>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
-            <div style="background:rgba(52,217,128,.07);border:1px solid rgba(52,217,128,.18);border-radius:5px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start">
+            <div
+              style="background:rgba(52,217,128,.07);border:1px solid rgba(52,217,128,.18);border-radius:5px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start">
               <div style="color:var(--g0);font-weight:700;font-size:13px;flex-shrink:0">&#10003;</div>
-              <div><div style="font-size:11px;font-weight:700;color:var(--g0);margin-bottom:3px">Backend Online</div><div style="font-size:11px;color:var(--tx1);line-height:1.6">Status dot is green and pulsing. All scan modules are available. Results stored in the local database.</div></div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--g0);margin-bottom:3px">Backend Online</div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.6">Status dot is green and pulsing. All scan
+                  modules are available. Results stored in the local database.</div>
+              </div>
             </div>
-            <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.18);border-radius:5px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start">
+            <div
+              style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.18);border-radius:5px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start">
               <div style="color:var(--r0);font-weight:700;font-size:13px;flex-shrink:0">&#10007;</div>
-              <div><div style="font-size:11px;font-weight:700;color:var(--r0);margin-bottom:3px">Backend Offline</div><div style="font-size:11px;color:var(--tx1);line-height:1.6">Status dot is red. Start <code style="color:var(--c0);font-family:var(--mono);font-size:10px">python backend.py</code> in your terminal. Scans will fail until resolved.</div></div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--r0);margin-bottom:3px">Backend Offline</div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.6">Status dot is red. Start <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">python backend.py</code> in your
+                  terminal. Scans will fail until resolved.</div>
+              </div>
             </div>
           </div>
-          <div class="guide-note" style="margin-top:14px"><strong>Python requirements:</strong> Python 3.8+, with <code style="font-family:var(--mono);color:var(--c0);font-size:11px">requests</code>, <code style="font-family:var(--mono);color:var(--c0);font-size:11px">flask</code>, and <code style="font-family:var(--mono);color:var(--c0);font-size:11px">flask-cors</code> installed. Run <code style="font-family:var(--mono);color:var(--c0);font-size:11px">pip install -r requirements.txt</code> if packages are missing.</div>
+          <div class="guide-note" style="margin-top:14px"><strong>Python requirements:</strong> Python 3.8+, with <code
+              style="font-family:var(--mono);color:var(--c0);font-size:11px">requests</code>, <code
+              style="font-family:var(--mono);color:var(--c0);font-size:11px">flask</code>, and <code
+              style="font-family:var(--mono);color:var(--c0);font-size:11px">flask-cors</code> installed. Run <code
+              style="font-family:var(--mono);color:var(--c0);font-size:11px">pip install -r requirements.txt</code> if
+            packages are missing.</div>
         </section>
 
         <!-- WORKFLOW -->
@@ -1941,44 +2972,87 @@
           <div style="display:flex;flex-direction:column;gap:0;margin-top:14px">
             <div style="display:flex;gap:0;align-items:stretch">
               <div style="display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0">
-                <div style="width:28px;height:28px;border-radius:50%;background:var(--c-dim);border:1px solid rgba(92,184,255,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--c0);flex-shrink:0">1</div>
+                <div
+                  style="width:28px;height:28px;border-radius:50%;background:var(--c-dim);border:1px solid rgba(92,184,255,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--c0);flex-shrink:0">
+                  1</div>
                 <div style="width:1px;flex:1;background:var(--border2);margin:4px 0"></div>
               </div>
-              <div style="padding:0 0 18px 14px"><div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Scope &amp; Authorization</div><div style="font-size:11px;color:var(--tx1);line-height:1.7">Confirm written permission for the target domain(s). Document scope boundaries. Never test production systems without explicit consent.</div></div>
+              <div style="padding:0 0 18px 14px">
+                <div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Scope &amp; Authorization
+                </div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.7">Confirm written permission for the target
+                  domain(s). Document scope boundaries. Never test production systems without explicit consent.</div>
+              </div>
             </div>
             <div style="display:flex;gap:0;align-items:stretch">
               <div style="display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0">
-                <div style="width:28px;height:28px;border-radius:50%;background:var(--g-dim);border:1px solid rgba(52,217,128,.28);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--g0);flex-shrink:0">2</div>
+                <div
+                  style="width:28px;height:28px;border-radius:50%;background:var(--g-dim);border:1px solid rgba(52,217,128,.28);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--g0);flex-shrink:0">
+                  2</div>
                 <div style="width:1px;flex:1;background:var(--border2);margin:4px 0"></div>
               </div>
-              <div style="padding:0 0 18px 14px"><div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">SSL / TLS First Pass</div><div style="font-size:11px;color:var(--tx1);line-height:1.7">Run the SSL Checker on the target hostname. Certificate issues and weak TLS versions affect all subsequent HTTP traffic security.</div></div>
+              <div style="padding:0 0 18px 14px">
+                <div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">SSL / TLS First Pass
+                </div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.7">Run the SSL Checker on the target hostname.
+                  Certificate issues and weak TLS versions affect all subsequent HTTP traffic security.</div>
+              </div>
             </div>
             <div style="display:flex;gap:0;align-items:stretch">
               <div style="display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0">
-                <div style="width:28px;height:28px;border-radius:50%;background:var(--y-dim);border:1px solid rgba(255,209,102,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--y0);flex-shrink:0">3</div>
+                <div
+                  style="width:28px;height:28px;border-radius:50%;background:var(--y-dim);border:1px solid rgba(255,209,102,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--y0);flex-shrink:0">
+                  3</div>
                 <div style="width:1px;flex:1;background:var(--border2);margin:4px 0"></div>
               </div>
-              <div style="padding:0 0 18px 14px"><div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Port Scanner — Network Surface</div><div style="font-size:11px;color:var(--tx1);line-height:1.7">Map exposed ports and identify running services. Open database ports or admin panels are often high-priority findings before web testing begins.</div></div>
+              <div style="padding:0 0 18px 14px">
+                <div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Port Scanner — Network
+                  Surface</div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.7">Map exposed ports and identify running
+                  services. Open database ports or admin panels are often high-priority findings before web testing
+                  begins.</div>
+              </div>
             </div>
             <div style="display:flex;gap:0;align-items:stretch">
               <div style="display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0">
-                <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--r0);flex-shrink:0">4</div>
+                <div
+                  style="width:28px;height:28px;border-radius:50%;background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--r0);flex-shrink:0">
+                  4</div>
                 <div style="width:1px;flex:1;background:var(--border2);margin:4px 0"></div>
               </div>
-              <div style="padding:0 0 18px 14px"><div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Vulnerability Scanner — Web Application</div><div style="font-size:11px;color:var(--tx1);line-height:1.7">Paste parameterized URLs and run SQLi, XSS, and path traversal tests. Select test categories relevant to the application type.</div></div>
+              <div style="padding:0 0 18px 14px">
+                <div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Vulnerability Scanner —
+                  Web Application</div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.7">Paste parameterized URLs and run SQLi, XSS,
+                  and path traversal tests. Select test categories relevant to the application type.</div>
+              </div>
             </div>
             <div style="display:flex;gap:0;align-items:stretch">
               <div style="display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0">
-                <div style="width:28px;height:28px;border-radius:50%;background:rgba(167,139,250,.10);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a78bfa;flex-shrink:0">5</div>
+                <div
+                  style="width:28px;height:28px;border-radius:50%;background:rgba(167,139,250,.10);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a78bfa;flex-shrink:0">
+                  5</div>
                 <div style="width:1px;flex:1;background:var(--border2);margin:4px 0"></div>
               </div>
-              <div style="padding:0 0 18px 14px"><div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">API Scanner — REST/GraphQL Endpoints</div><div style="font-size:11px;color:var(--tx1);line-height:1.7">Probe API endpoints for open access, CORS misconfigurations, auth bypasses, and sensitive data exposure patterns.</div></div>
+              <div style="padding:0 0 18px 14px">
+                <div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">API Scanner —
+                  REST/GraphQL Endpoints</div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.7">Probe API endpoints for open access, CORS
+                  misconfigurations, auth bypasses, and sensitive data exposure patterns.</div>
+              </div>
             </div>
             <div style="display:flex;gap:0;align-items:stretch">
               <div style="display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0">
-                <div style="width:28px;height:28px;border-radius:50%;background:var(--surface);border:1px solid var(--border3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--tx1);flex-shrink:0">6</div>
+                <div
+                  style="width:28px;height:28px;border-radius:50%;background:var(--surface);border:1px solid var(--border3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--tx1);flex-shrink:0">
+                  6</div>
               </div>
-              <div style="padding:0 0 0 14px"><div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Report &amp; Remediate</div><div style="font-size:11px;color:var(--tx1);line-height:1.7">Generate a PDF report, review fix cards for each finding, use Custom Tests to re-verify after remediation is applied.</div></div>
+              <div style="padding:0 0 0 14px">
+                <div style="font-size:12px;font-weight:700;color:var(--tx0);margin-bottom:3px">Report &amp; Remediate
+                </div>
+                <div style="font-size:11px;color:var(--tx1);line-height:1.7">Generate a PDF report, review fix cards for
+                  each finding, use Custom Tests to re-verify after remediation is applied.</div>
+              </div>
             </div>
           </div>
         </section>
@@ -1986,118 +3060,353 @@
         <!-- MODULE REFERENCE -->
         <section class="guide-section" id="guide-modules">
           <h3>Module Reference</h3>
-          <p>Click any module card to expand detailed usage instructions, configuration options, and result interpretation guidance.</p>
+          <p>Click any module card to expand detailed usage instructions, configuration options, and result
+            interpretation guidance.</p>
 
           <div class="module-steps">
-            <div class="module-step-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
+            <div class="module-step-header"
+              onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
               <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:32px;height:32px;border-radius:6px;background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">&#128269;</div>
-                <div><div style="font-size:13px;font-weight:700;color:var(--tx0)">Vulnerability Scanner</div><div style="font-size:10px;color:var(--tx2);margin-top:2px">SQL Injection &middot; XSS &middot; Path Traversal &middot; SSRF &middot; Header Injection</div></div>
+                <div
+                  style="width:32px;height:32px;border-radius:6px;background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">
+                  &#128269;</div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:var(--tx0)">Vulnerability Scanner</div>
+                  <div style="font-size:10px;color:var(--tx2);margin-top:2px">SQL Injection &middot; XSS &middot; Path
+                    Traversal &middot; SSRF &middot; Header Injection</div>
+                </div>
               </div>
               <span class="step-badge">&#9660; Expand</span>
             </div>
             <div class="module-steps-body">
-              <div style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">The Vulnerability Scanner sends <strong>crafted HTTP requests</strong> to URLs containing query parameters and analyzes server responses for signatures that indicate injection or traversal vulnerabilities. Each parameter in the URL is tested independently across all enabled test categories.</div>
-              <div class="module-step-item"><div class="module-step-num">1</div><div>Ensure the backend is running — the sidebar status dot must be green. Start it with <code style="color:var(--c0);font-family:var(--mono);font-size:10px">python backend.py</code> if needed.</div></div>
-              <div class="module-step-item"><div class="module-step-num">2</div><div>Navigate to <strong>Scanner</strong>. In the Target URL field, paste a full URL with query parameters, e.g. <code style="color:var(--c0);font-family:var(--mono);font-size:10px">http://testphp.vulnweb.com/artists.php?artist=1</code>. The scanner tests each parameter it detects.</div></div>
-              <div class="module-step-item"><div class="module-step-num">3</div><div>Select which vulnerability categories to test in the Test Modules panel. Use <em>All</em> for a comprehensive scan, or pick specific categories (SQLi, XSS, etc.) for targeted testing. Each chip shows a payload count.</div></div>
-              <div class="module-step-item"><div class="module-step-num">4</div><div>Click <strong>RUN SCAN</strong>. The live log streams real-time progress — each entry shows timestamp, log level, and the test being executed. VULN entries indicate a potential finding.</div></div>
-              <div class="module-step-item"><div class="module-step-num">5</div><div>When complete, a <strong>verdict banner</strong> summarizes the result: VULNERABLE (red) or SAFE (green), with a finding count. The result table below lists every test, its payload, response time, and risk classification.</div></div>
-              <div class="module-step-item"><div class="module-step-num">6</div><div>Expand <strong>Fix Cards</strong> for any VULN findings to view remediation code examples, OWASP references, and configuration guidance specific to each vulnerability type.</div></div>
-              <div class="module-step-item"><div class="module-step-num">7</div><div>Navigate to <strong>Reports</strong> to generate a PDF of the full findings, suitable for development teams or security assessment documentation.</div></div>
-              <div style="margin-top:14px;padding:12px 14px;background:var(--y-dim);border:1px solid rgba(255,209,102,.2);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7"><strong style="color:var(--y0)">Result Interpretation:</strong> Risk levels: <span class="badge critical" style="font-size:9px">critical</span> authentication bypass or full data access &rarr; <span class="badge high" style="font-size:9px">high</span> significant exposure &rarr; <span class="badge medium" style="font-size:9px">medium</span> reflected XSS &rarr; <span class="badge low" style="font-size:9px">low</span> hardening issues. Always manually verify VULN findings — false positives can occur with WAFs and custom error pages.</div>
+              <div
+                style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">
+                The Vulnerability Scanner sends <strong>crafted HTTP requests</strong> to URLs containing query
+                parameters and analyzes server responses for signatures that indicate injection or traversal
+                vulnerabilities. Each parameter in the URL is tested independently across all enabled test categories.
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">1</div>
+                <div>Ensure the backend is running — the sidebar status dot must be green. Start it with <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">python backend.py</code> if needed.
+                </div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">2</div>
+                <div>Navigate to <strong>Scanner</strong>. In the Target URL field, paste a full URL with query
+                  parameters, e.g. <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">http://testphp.vulnweb.com/artists.php?artist=1</code>.
+                  The scanner tests each parameter it detects.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">3</div>
+                <div>Select which vulnerability categories to test in the Test Modules panel. Use <em>All</em> for a
+                  comprehensive scan, or pick specific categories (SQLi, XSS, etc.) for targeted testing. Each chip
+                  shows a payload count.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">4</div>
+                <div>Click <strong>RUN SCAN</strong>. The live log streams real-time progress — each entry shows
+                  timestamp, log level, and the test being executed. VULN entries indicate a potential finding.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">5</div>
+                <div>When complete, a <strong>verdict banner</strong> summarizes the result: VULNERABLE (red) or SAFE
+                  (green), with a finding count. The result table below lists every test, its payload, response time,
+                  and risk classification.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">6</div>
+                <div>Expand <strong>Fix Cards</strong> for any VULN findings to view remediation code examples, OWASP
+                  references, and configuration guidance specific to each vulnerability type.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">7</div>
+                <div>Navigate to <strong>Reports</strong> to generate a PDF of the full findings, suitable for
+                  development teams or security assessment documentation.</div>
+              </div>
+              <div
+                style="margin-top:14px;padding:12px 14px;background:var(--y-dim);border:1px solid rgba(255,209,102,.2);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7">
+                <strong style="color:var(--y0)">Result Interpretation:</strong> Risk levels: <span
+                  class="badge critical" style="font-size:9px">critical</span> authentication bypass or full data access
+                &rarr; <span class="badge high" style="font-size:9px">high</span> significant exposure &rarr; <span
+                  class="badge medium" style="font-size:9px">medium</span> reflected XSS &rarr; <span class="badge low"
+                  style="font-size:9px">low</span> hardening issues. Always manually verify VULN findings — false
+                positives can occur with WAFs and custom error pages.
+              </div>
             </div>
           </div>
 
           <div class="module-steps" style="margin-top:8px">
-            <div class="module-step-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
+            <div class="module-step-header"
+              onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
               <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:32px;height:32px;border-radius:6px;background:rgba(92,184,255,.10);border:1px solid rgba(92,184,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">&#128274;</div>
-                <div><div style="font-size:13px;font-weight:700;color:var(--tx0)">SSL / TLS Checker</div><div style="font-size:10px;color:var(--tx2);margin-top:2px">Certificate Validity &middot; TLS Version &middot; HSTS &middot; Redirect Chain</div></div>
+                <div
+                  style="width:32px;height:32px;border-radius:6px;background:rgba(92,184,255,.10);border:1px solid rgba(92,184,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">
+                  &#128274;</div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:var(--tx0)">SSL / TLS Checker</div>
+                  <div style="font-size:10px;color:var(--tx2);margin-top:2px">Certificate Validity &middot; TLS Version
+                    &middot; HSTS &middot; Redirect Chain</div>
+                </div>
               </div>
               <span class="step-badge">&#9660; Expand</span>
             </div>
             <div class="module-steps-body">
-              <div style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">The SSL/TLS Checker validates the full certificate chain, negotiated TLS protocol versions, HSTS header presence and configuration, and whether HTTP traffic is properly redirected to HTTPS. These checks are foundational — a weak TLS configuration undermines all other application-layer controls.</div>
-              <div class="module-step-item"><div class="module-step-num">1</div><div>Navigate to <strong>SSL Check</strong> in the sidebar.</div></div>
-              <div class="module-step-item"><div class="module-step-num">2</div><div>Enter a hostname or full URL. Both formats are accepted: <code style="color:var(--c0);font-family:var(--mono);font-size:10px">example.com</code> or <code style="color:var(--c0);font-family:var(--mono);font-size:10px">https://example.com</code>. Do not include URL paths.</div></div>
-              <div class="module-step-item"><div class="module-step-num">3</div><div>Click <strong>CHECK SSL</strong>. Results appear organized into six check categories: certificate validity, expiry date, TLS version, HSTS, HTTPS redirect, and cipher strength.</div></div>
-              <div class="module-step-item"><div class="module-step-num">4</div><div>Each check shows a status icon: <span style="color:var(--g0)">&#10003; green</span> (pass), <span style="color:var(--y0)">&#9888; amber</span> (warning), or <span style="color:var(--r0)">&#10007; red</span> (fail). Failures include descriptions of the specific issue.</div></div>
-              <div class="module-step-item"><div class="module-step-num">5</div><div>Expand <strong>Fix Cards</strong> for each red finding to view server-specific configuration snippets (nginx, Apache, IIS) to resolve the issue.</div></div>
-              <div style="margin-top:14px;padding:12px 14px;background:var(--c-dim);border:1px solid rgba(92,184,255,.18);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7"><strong style="color:var(--c0)">Key checks:</strong> TLS 1.0 and 1.1 are deprecated — disable them. HSTS with <code style="font-family:var(--mono);color:var(--c0);font-size:10px">max-age</code> &ge; 31536000 is recommended. Certificates expiring within 30 days trigger a warning even if currently valid.</div>
+              <div
+                style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">
+                The SSL/TLS Checker validates the full certificate chain, negotiated TLS protocol versions, HSTS header
+                presence and configuration, and whether HTTP traffic is properly redirected to HTTPS. These checks are
+                foundational — a weak TLS configuration undermines all other application-layer controls.</div>
+              <div class="module-step-item">
+                <div class="module-step-num">1</div>
+                <div>Navigate to <strong>SSL Check</strong> in the sidebar.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">2</div>
+                <div>Enter a hostname or full URL. Both formats are accepted: <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">example.com</code> or <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">https://example.com</code>. Do not
+                  include URL paths.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">3</div>
+                <div>Click <strong>CHECK SSL</strong>. Results appear organized into six check categories: certificate
+                  validity, expiry date, TLS version, HSTS, HTTPS redirect, and cipher strength.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">4</div>
+                <div>Each check shows a status icon: <span style="color:var(--g0)">&#10003; green</span> (pass), <span
+                    style="color:var(--y0)">&#9888; amber</span> (warning), or <span style="color:var(--r0)">&#10007;
+                    red</span> (fail). Failures include descriptions of the specific issue.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">5</div>
+                <div>Expand <strong>Fix Cards</strong> for each red finding to view server-specific configuration
+                  snippets (nginx, Apache, IIS) to resolve the issue.</div>
+              </div>
+              <div
+                style="margin-top:14px;padding:12px 14px;background:var(--c-dim);border:1px solid rgba(92,184,255,.18);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7">
+                <strong style="color:var(--c0)">Key checks:</strong> TLS 1.0 and 1.1 are deprecated — disable them. HSTS
+                with <code style="font-family:var(--mono);color:var(--c0);font-size:10px">max-age</code> &ge; 31536000
+                is recommended. Certificates expiring within 30 days trigger a warning even if currently valid.
+              </div>
             </div>
           </div>
 
           <div class="module-steps" style="margin-top:8px">
-            <div class="module-step-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
+            <div class="module-step-header"
+              onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
               <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:32px;height:32px;border-radius:6px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">&#9889;</div>
-                <div><div style="font-size:13px;font-weight:700;color:var(--tx0)">API Security Scanner</div><div style="font-size:10px;color:var(--tx2);margin-top:2px">REST/JSON Probing &middot; CORS &middot; Auth Bypass &middot; Data Exposure &middot; GraphQL</div></div>
+                <div
+                  style="width:32px;height:32px;border-radius:6px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">
+                  &#9889;</div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:var(--tx0)">API Security Scanner</div>
+                  <div style="font-size:10px;color:var(--tx2);margin-top:2px">REST/JSON Probing &middot; CORS &middot;
+                    Auth Bypass &middot; Data Exposure &middot; GraphQL</div>
+                </div>
               </div>
               <span class="step-badge">&#9660; Expand</span>
             </div>
             <div class="module-steps-body">
-              <div style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">The API Scanner probes REST and GraphQL endpoints using GET and POST methods. It detects unauthorized access to sensitive paths, CORS policy misconfigurations, missing authentication enforcement, and response body patterns that suggest data over-exposure.</div>
-              <div class="module-step-item"><div class="module-step-num">1</div><div>Navigate to <strong>API Scanner</strong> in the sidebar.</div></div>
-              <div class="module-step-item"><div class="module-step-num">2</div><div>Enter the API base URL, e.g. <code style="color:var(--c0);font-family:var(--mono);font-size:10px">https://api.example.com/v1</code>. This is the root from which paths will be appended.</div></div>
-              <div class="module-step-item"><div class="module-step-num">3</div><div>Optionally enter specific paths in the textarea, one per line (e.g. <code style="color:var(--c0);font-family:var(--mono);font-size:10px">/users</code>, <code style="color:var(--c0);font-family:var(--mono);font-size:10px">/admin</code>). Leave blank to use the built-in probe list of 40+ common API paths.</div></div>
-              <div class="module-step-item"><div class="module-step-num">4</div><div>Click <strong>SCAN API</strong>. The scanner dispatches requests to each path and evaluates responses for HTTP status codes, response headers, CORS policies, and body content patterns.</div></div>
-              <div class="module-step-item"><div class="module-step-num">5</div><div>Results show a <strong>Security Score</strong> (0-100), severity breakdown, summary of findings, and an endpoint-by-endpoint table with method, status, and flagged issues.</div></div>
-              <div class="module-step-item"><div class="module-step-num">6</div><div>Results are heuristic — a 200 response on <code style="color:var(--c0);font-family:var(--mono);font-size:10px">/api/admin</code> is a signal, not a confirmed bypass. Always verify manually.</div></div>
-              <div style="margin-top:14px;padding:12px 14px;background:var(--y-dim);border:1px solid rgba(255,209,102,.2);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7"><strong style="color:var(--y0)">CORS findings:</strong> A wildcard <code style="font-family:var(--mono);color:var(--c0);font-size:10px">Access-Control-Allow-Origin: *</code> on sensitive data endpoints is a genuine vulnerability. On public data endpoints it is acceptable.</div>
+              <div
+                style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">
+                The API Scanner probes REST and GraphQL endpoints using GET and POST methods. It detects unauthorized
+                access to sensitive paths, CORS policy misconfigurations, missing authentication enforcement, and
+                response body patterns that suggest data over-exposure.</div>
+              <div class="module-step-item">
+                <div class="module-step-num">1</div>
+                <div>Navigate to <strong>API Scanner</strong> in the sidebar.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">2</div>
+                <div>Enter the API base URL, e.g. <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">https://api.example.com/v1</code>.
+                  This is the root from which paths will be appended.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">3</div>
+                <div>Optionally enter specific paths in the textarea, one per line (e.g. <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">/users</code>, <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">/admin</code>). Leave blank to use
+                  the built-in probe list of 40+ common API paths.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">4</div>
+                <div>Click <strong>SCAN API</strong>. The scanner dispatches requests to each path and evaluates
+                  responses for HTTP status codes, response headers, CORS policies, and body content patterns.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">5</div>
+                <div>Results show a <strong>Security Score</strong> (0-100), severity breakdown, summary of findings,
+                  and an endpoint-by-endpoint table with method, status, and flagged issues.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">6</div>
+                <div>Results are heuristic — a 200 response on <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">/api/admin</code> is a signal, not a
+                  confirmed bypass. Always verify manually.</div>
+              </div>
+              <div
+                style="margin-top:14px;padding:12px 14px;background:var(--y-dim);border:1px solid rgba(255,209,102,.2);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7">
+                <strong style="color:var(--y0)">CORS findings:</strong> A wildcard <code
+                  style="font-family:var(--mono);color:var(--c0);font-size:10px">Access-Control-Allow-Origin: *</code>
+                on sensitive data endpoints is a genuine vulnerability. On public data endpoints it is acceptable.
+              </div>
             </div>
           </div>
 
           <div class="module-steps" style="margin-top:8px">
-            <div class="module-step-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
+            <div class="module-step-header"
+              onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
               <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:32px;height:32px;border-radius:6px;background:rgba(167,139,250,.10);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">&#127758;</div>
-                <div><div style="font-size:13px;font-weight:700;color:var(--tx0)">Port Scanner</div><div style="font-size:10px;color:var(--tx2);margin-top:2px">15 Common Ports &middot; Service ID &middot; Firewall Exposure &middot; Risk Rating</div></div>
+                <div
+                  style="width:32px;height:32px;border-radius:6px;background:rgba(167,139,250,.10);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">
+                  &#127758;</div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:var(--tx0)">Port Scanner</div>
+                  <div style="font-size:10px;color:var(--tx2);margin-top:2px">15 Common Ports &middot; Service ID
+                    &middot; Firewall Exposure &middot; Risk Rating</div>
+                </div>
               </div>
               <span class="step-badge">&#9660; Expand</span>
             </div>
             <div class="module-steps-body">
-              <div style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">The Port Scanner resolves the target hostname via DNS and then attempts TCP connections to 15 high-value ports. Open ports are identified and tagged with their associated service and a risk classification based on service type and exposure context.</div>
-              <div class="module-step-item"><div class="module-step-num">1</div><div>Navigate to <strong>Port Scan</strong> in the sidebar.</div></div>
-              <div class="module-step-item"><div class="module-step-num">2</div><div>Enter a hostname or IP address, e.g. <code style="color:var(--c0);font-family:var(--mono);font-size:10px">scanme.nmap.org</code>. Full URLs are also accepted — the scanner extracts the hostname automatically.</div></div>
-              <div class="module-step-item"><div class="module-step-num">3</div><div>Click <strong>SCAN PORTS</strong>. DNS resolution happens first, then TCP probes are sent in parallel. A progress bar tracks completion across the 15 ports.</div></div>
-              <div class="module-step-item"><div class="module-step-num">4</div><div>Results show each port with status: <span style="color:var(--r0);font-weight:700">OPEN</span> (connection accepted), <span style="color:var(--tx3)">CLOSED</span> (refused), or <span style="color:var(--y0)">FILTERED</span> (timeout). Open ports include service name and risk rating.</div></div>
-              <div class="module-step-item"><div class="module-step-num">5</div><div>High-risk open ports (databases on 3306/5432, SMB on 445, RDP on 3389) generate fix recommendations with firewall rules and hardening guidance.</div></div>
-              <div style="margin-top:14px;padding:12px 14px;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.18);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7"><strong style="color:var(--r0)">Legal reminder:</strong> Port scanning without authorization is illegal in many jurisdictions. Only scan systems you own or have explicit written permission to test. Use <code style="font-family:var(--mono);color:var(--c0);font-size:10px">scanme.nmap.org</code> for safe practice.</div>
+              <div
+                style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">
+                The Port Scanner resolves the target hostname via DNS and then attempts TCP connections to 15 high-value
+                ports. Open ports are identified and tagged with their associated service and a risk classification
+                based on service type and exposure context.</div>
+              <div class="module-step-item">
+                <div class="module-step-num">1</div>
+                <div>Navigate to <strong>Port Scan</strong> in the sidebar.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">2</div>
+                <div>Enter a hostname or IP address, e.g. <code
+                    style="color:var(--c0);font-family:var(--mono);font-size:10px">scanme.nmap.org</code>. Full URLs are
+                  also accepted — the scanner extracts the hostname automatically.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">3</div>
+                <div>Click <strong>SCAN PORTS</strong>. DNS resolution happens first, then TCP probes are sent in
+                  parallel. A progress bar tracks completion across the 15 ports.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">4</div>
+                <div>Results show each port with status: <span style="color:var(--r0);font-weight:700">OPEN</span>
+                  (connection accepted), <span style="color:var(--tx3)">CLOSED</span> (refused), or <span
+                    style="color:var(--y0)">FILTERED</span> (timeout). Open ports include service name and risk rating.
+                </div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">5</div>
+                <div>High-risk open ports (databases on 3306/5432, SMB on 445, RDP on 3389) generate fix recommendations
+                  with firewall rules and hardening guidance.</div>
+              </div>
+              <div
+                style="margin-top:14px;padding:12px 14px;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.18);border-radius:4px;font-size:11px;color:var(--tx1);line-height:1.7">
+                <strong style="color:var(--r0)">Legal reminder:</strong> Port scanning without authorization is illegal
+                in many jurisdictions. Only scan systems you own or have explicit written permission to test. Use <code
+                  style="font-family:var(--mono);color:var(--c0);font-size:10px">scanme.nmap.org</code> for safe
+                practice.
+              </div>
             </div>
           </div>
 
           <div class="module-steps" style="margin-top:8px">
-            <div class="module-step-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
+            <div class="module-step-header"
+              onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
               <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:32px;height:32px;border-radius:6px;background:rgba(52,217,128,.10);border:1px solid rgba(52,217,128,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">&#9881;</div>
-                <div><div style="font-size:13px;font-weight:700;color:var(--tx0)">Custom Tests</div><div style="font-size:10px;color:var(--tx2);margin-top:2px">Save Checks &middot; Re-run After Fixes &middot; GET &amp; POST &middot; Expected Status</div></div>
+                <div
+                  style="width:32px;height:32px;border-radius:6px;background:rgba(52,217,128,.10);border:1px solid rgba(52,217,128,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">
+                  &#9881;</div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:var(--tx0)">Custom Tests</div>
+                  <div style="font-size:10px;color:var(--tx2);margin-top:2px">Save Checks &middot; Re-run After Fixes
+                    &middot; GET &amp; POST &middot; Expected Status</div>
+                </div>
               </div>
               <span class="step-badge">&#9660; Expand</span>
             </div>
             <div class="module-steps-body">
-              <div style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">Custom Tests let you define, save, and re-run arbitrary HTTP requests. Useful for verifying that fixes have been applied, testing non-standard endpoints, or building a regression suite that runs before and after deployments.</div>
-              <div class="module-step-item"><div class="module-step-num">1</div><div>Navigate to <strong>Custom Tests</strong> in the sidebar.</div></div>
-              <div class="module-step-item"><div class="module-step-num">2</div><div>Fill in the test form: give it a descriptive <strong>Name</strong>, the full <strong>Target URL</strong>, select the HTTP <strong>Method</strong> (GET or POST), optionally provide a request <strong>Payload</strong> for POST bodies, and set the <strong>Expected Status</strong> code (default 200).</div></div>
-              <div class="module-step-item"><div class="module-step-num">3</div><div>Click <strong>SAVE TEST</strong>. The test is persisted in the backend database and appears in the saved tests list below.</div></div>
-              <div class="module-step-item"><div class="module-step-num">4</div><div>Click <strong>&#9654; Run</strong> next to any saved test to execute it immediately. Results show HTTP status, response time, and whether flagged patterns were detected in the response body.</div></div>
-              <div class="module-step-item"><div class="module-step-num">5</div><div>A test <strong>passes</strong> when the actual HTTP status matches your expected status. Use this to verify that a previously open endpoint now correctly returns 401 or 403 after authentication controls are applied.</div></div>
+              <div
+                style="margin-bottom:16px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--tx1);line-height:1.75">
+                Custom Tests let you define, save, and re-run arbitrary HTTP requests. Useful for verifying that fixes
+                have been applied, testing non-standard endpoints, or building a regression suite that runs before and
+                after deployments.</div>
+              <div class="module-step-item">
+                <div class="module-step-num">1</div>
+                <div>Navigate to <strong>Custom Tests</strong> in the sidebar.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">2</div>
+                <div>Fill in the test form: give it a descriptive <strong>Name</strong>, the full <strong>Target
+                    URL</strong>, select the HTTP <strong>Method</strong> (GET or POST), optionally provide a request
+                  <strong>Payload</strong> for POST bodies, and set the <strong>Expected Status</strong> code (default
+                  200).
+                </div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">3</div>
+                <div>Click <strong>SAVE TEST</strong>. The test is persisted in the backend database and appears in the
+                  saved tests list below.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">4</div>
+                <div>Click <strong>&#9654; Run</strong> next to any saved test to execute it immediately. Results show
+                  HTTP status, response time, and whether flagged patterns were detected in the response body.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">5</div>
+                <div>A test <strong>passes</strong> when the actual HTTP status matches your expected status. Use this
+                  to verify that a previously open endpoint now correctly returns 401 or 403 after authentication
+                  controls are applied.</div>
+              </div>
             </div>
           </div>
 
           <div class="module-steps" style="margin-top:8px">
-            <div class="module-step-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
+            <div class="module-step-header"
+              onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.step-badge').textContent=this.nextElementSibling.classList.contains('open')?'&#9650; Collapse':'&#9660; Expand'">
               <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:32px;height:32px;border-radius:6px;background:rgba(92,184,255,.10);border:1px solid rgba(92,184,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">&#128202;</div>
-                <div><div style="font-size:13px;font-weight:700;color:var(--tx0)">Dashboard, History &amp; Reports</div><div style="font-size:10px;color:var(--tx2);margin-top:2px">Trend Charts &middot; Scan Log &middot; PDF Export &middot; Payload Library</div></div>
+                <div
+                  style="width:32px;height:32px;border-radius:6px;background:rgba(92,184,255,.10);border:1px solid rgba(92,184,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">
+                  &#128202;</div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:var(--tx0)">Dashboard, History &amp; Reports</div>
+                  <div style="font-size:10px;color:var(--tx2);margin-top:2px">Trend Charts &middot; Scan Log &middot;
+                    PDF Export &middot; Payload Library</div>
+                </div>
               </div>
               <span class="step-badge">&#9660; Expand</span>
             </div>
             <div class="module-steps-body">
-              <div class="module-step-item"><div class="module-step-num">&#8212;</div><div><strong>Dashboard</strong> provides aggregate statistics across all historical scans: vulnerability trends over time, category breakdown charts, most frequently vulnerable targets, and a recent activity feed. Track posture improvements over assessment cycles.</div></div>
-              <div class="module-step-item"><div class="module-step-num">&#8212;</div><div><strong>History</strong> lists every scan run, with target URL, timestamp, duration, test count, and vulnerability count. Click <strong>Report</strong> next to any entry to jump to its detailed findings. Click <strong>Delete</strong> to remove a record permanently.</div></div>
-              <div class="module-step-item"><div class="module-step-num">&#8212;</div><div><strong>Reports</strong> generates a structured PDF of a selected scan, including executive summary, category breakdown, full findings table, and remediation recommendations. Select a scan, click <strong>GENERATE PDF</strong>, and the file downloads automatically.</div></div>
-              <div class="module-step-item"><div class="module-step-num">&#8212;</div><div><strong>Payloads</strong> is a read-only reference library of the attack payloads used by the Scanner. Browse by category (SQLi, XSS, etc.) to understand what each test does and why specific patterns trigger a vulnerability signal.</div></div>
+              <div class="module-step-item">
+                <div class="module-step-num">&#8212;</div>
+                <div><strong>Dashboard</strong> provides aggregate statistics across all historical scans: vulnerability
+                  trends over time, category breakdown charts, most frequently vulnerable targets, and a recent activity
+                  feed. Track posture improvements over assessment cycles.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">&#8212;</div>
+                <div><strong>History</strong> lists every scan run, with target URL, timestamp, duration, test count,
+                  and vulnerability count. Click <strong>Report</strong> next to any entry to jump to its detailed
+                  findings. Click <strong>Delete</strong> to remove a record permanently.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">&#8212;</div>
+                <div><strong>Reports</strong> generates a structured PDF of a selected scan, including executive
+                  summary, category breakdown, full findings table, and remediation recommendations. Select a scan,
+                  click <strong>GENERATE PDF</strong>, and the file downloads automatically.</div>
+              </div>
+              <div class="module-step-item">
+                <div class="module-step-num">&#8212;</div>
+                <div><strong>Payloads</strong> is a read-only reference library of the attack payloads used by the
+                  Scanner. Browse by category (SQLi, XSS, etc.) to understand what each test does and why specific
+                  patterns trigger a vulnerability signal.</div>
+              </div>
             </div>
           </div>
         </section>
@@ -2106,16 +3415,58 @@
         <section class="guide-section" id="guide-samples-sqli">
           <div class="guide-kicker">Sample data &middot; Web application testing</div>
           <h3>SQL Injection &amp; XSS Test Targets</h3>
-          <p>These are <strong>deliberately vulnerable applications</strong> maintained for security training with explicit scanning permission.</p>
+          <p>These are <strong>deliberately vulnerable applications</strong> maintained for security training with
+            explicit scanning permission.</p>
           <div class="guide-table-wrap">
             <table class="guide-table">
-              <thead><tr><th>Platform</th><th>URL</th><th>Focus</th><th>Action</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>URL</th>
+                  <th>Focus</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td>Acunetix testphp</td><td><code>http://testphp.vulnweb.com/artists.php?artist=1</code></td><td>SQLi, XSS</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('scanner','http://testphp.vulnweb.com/artists.php?artist=1')">Use in Scanner</button></td></tr>
-                <tr><td>Acunetix testphp</td><td><code>http://testphp.vulnweb.com/search.php?test=query</code></td><td>SQLi, XSS</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('scanner','http://testphp.vulnweb.com/search.php?test=query')">Use in Scanner</button></td></tr>
-                <tr><td>Acunetix testphp</td><td><code>http://testphp.vulnweb.com/login.php</code></td><td>SQLi, XSS</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('scanner','http://testphp.vulnweb.com/login.php')">Use in Scanner</button></td></tr>
-                <tr><td>Altoro Mutual (IBM)</td><td><code>http://demo.testfire.net</code></td><td>SQLi, XSS</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('scanner','http://demo.testfire.net')">Use in Scanner</button></td></tr>
-                <tr><td>Zero Bank</td><td><code>http://zero.webappsecurity.com</code></td><td>SQLi, XSS</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('scanner','http://zero.webappsecurity.com')">Use in Scanner</button></td></tr>
+                <tr>
+                  <td>Acunetix testphp</td>
+                  <td><code>http://testphp.vulnweb.com/artists.php?artist=1</code></td>
+                  <td>SQLi, XSS</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('scanner','http://testphp.vulnweb.com/artists.php?artist=1')">Use in
+                      Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>Acunetix testphp</td>
+                  <td><code>http://testphp.vulnweb.com/search.php?test=query</code></td>
+                  <td>SQLi, XSS</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('scanner','http://testphp.vulnweb.com/search.php?test=query')">Use in
+                      Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>Acunetix testphp</td>
+                  <td><code>http://testphp.vulnweb.com/login.php</code></td>
+                  <td>SQLi, XSS</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('scanner','http://testphp.vulnweb.com/login.php')">Use in
+                      Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>Altoro Mutual (IBM)</td>
+                  <td><code>http://demo.testfire.net</code></td>
+                  <td>SQLi, XSS</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('scanner','http://demo.testfire.net')">Use in Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>Zero Bank</td>
+                  <td><code>http://zero.webappsecurity.com</code></td>
+                  <td>SQLi, XSS</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('scanner','http://zero.webappsecurity.com')">Use in Scanner</button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2127,11 +3478,39 @@
           <p>Public APIs suitable for testing API scanner behavior and evaluating data exposure detection patterns.</p>
           <div class="guide-table-wrap">
             <table class="guide-table">
-              <thead><tr><th>Platform</th><th>Base URL</th><th>What to explore</th><th>Action</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>Base URL</th>
+                  <th>What to explore</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td>Pentest Ground: RestFlaw</td><td><code>https://pentest-ground.com:9000</code></td><td>SQLi, code injection, XXE</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('api-security','https://pentest-ground.com:9000','')">Use in API Scanner</button></td></tr>
-                <tr><td>reqres.in</td><td><code>https://reqres.in</code> + <code>/api/users</code></td><td>REST structure, pagination</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('api-security','https://reqres.in','/api/users')">Use in API Scanner</button></td></tr>
-                <tr><td>randomuser.me</td><td><code>https://randomuser.me</code> + <code>/api/</code></td><td>Data exposure patterns</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('api-security','https://randomuser.me','/api/')">Use in API Scanner</button></td></tr>
+                <tr>
+                  <td>Pentest Ground: RestFlaw</td>
+                  <td><code>https://pentest-ground.com:9000</code></td>
+                  <td>SQLi, code injection, XXE</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('api-security','https://pentest-ground.com:9000','')">Use in API
+                      Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>reqres.in</td>
+                  <td><code>https://reqres.in</code> + <code>/api/users</code></td>
+                  <td>REST structure, pagination</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('api-security','https://reqres.in','/api/users')">Use in API
+                      Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>randomuser.me</td>
+                  <td><code>https://randomuser.me</code> + <code>/api/</code></td>
+                  <td>Data exposure patterns</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('api-security','https://randomuser.me','/api/')">Use in API
+                      Scanner</button></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2143,10 +3522,28 @@
           <p>Public GraphQL endpoints for evaluating introspection detection and query analysis capabilities.</p>
           <div class="guide-table-wrap">
             <table class="guide-table">
-              <thead><tr><th>Platform</th><th>URL</th><th>Action</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>URL</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td>Countries API</td><td><code>https://countries.trevorblades.com/graphql</code></td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('api-security','https://countries.trevorblades.com','/graphql')">Use in API Scanner</button></td></tr>
-                <tr><td>SpaceX API</td><td><code>https://spacex-production.up.railway.app</code></td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('api-security','https://spacex-production.up.railway.app','')">Use in API Scanner</button></td></tr>
+                <tr>
+                  <td>Countries API</td>
+                  <td><code>https://countries.trevorblades.com/graphql</code></td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('api-security','https://countries.trevorblades.com','/graphql')">Use in
+                      API Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>SpaceX API</td>
+                  <td><code>https://spacex-production.up.railway.app</code></td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('api-security','https://spacex-production.up.railway.app','')">Use in
+                      API Scanner</button></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2155,13 +3552,33 @@
         <section class="guide-section" id="guide-samples-ports">
           <div class="guide-kicker">Sample data &middot; Port scanning</div>
           <h3>Port Scan Targets</h3>
-          <p>These hosts have explicit permission for port scanning. Use for safe practice without risking unauthorized testing.</p>
+          <p>These hosts have explicit permission for port scanning. Use for safe practice without risking unauthorized
+            testing.</p>
           <div class="guide-table-wrap">
             <table class="guide-table">
-              <thead><tr><th>Target</th><th>Hostname</th><th>Notes</th><th>Action</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Target</th>
+                  <th>Hostname</th>
+                  <th>Notes</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td>Scanme (nmap.org)</td><td><code>scanme.nmap.org</code></td><td>Official scanning practice target</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('port-scanner','scanme.nmap.org')">Use in Port Scanner</button></td></tr>
-                <tr><td>Acunetix testphp</td><td><code>testphp.vulnweb.com</code></td><td>Vulnerable web demo server</td><td><button type="button" class="guide-use-btn" onclick="applyGuideSample('port-scanner','testphp.vulnweb.com')">Use in Port Scanner</button></td></tr>
+                <tr>
+                  <td>Scanme (nmap.org)</td>
+                  <td><code>scanme.nmap.org</code></td>
+                  <td>Official scanning practice target</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('port-scanner','scanme.nmap.org')">Use in Port Scanner</button></td>
+                </tr>
+                <tr>
+                  <td>Acunetix testphp</td>
+                  <td><code>testphp.vulnweb.com</code></td>
+                  <td>Vulnerable web demo server</td>
+                  <td><button type="button" class="guide-use-btn"
+                      onclick="applyGuideSample('port-scanner','testphp.vulnweb.com')">Use in Port Scanner</button></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2173,49 +3590,94 @@
           <div style="margin-top:12px">
 
             <div class="module-steps" style="margin-bottom:6px">
-              <div class="module-step-header" style="padding:12px 16px" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
-                <span style="font-size:12px;font-weight:600;color:var(--tx0)">Why does the backend show as offline?</span>
-                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
-              </div>
-              <div class="module-steps-body" style="padding:12px 16px"><div style="font-size:12px;color:var(--tx1);line-height:1.75">The frontend pings <code style="font-family:var(--mono);color:var(--c0);font-size:10px">localhost:8765/api/scans</code> on load. If it times out, the backend process is not running. Open a terminal, navigate to the project directory, and run <code style="font-family:var(--mono);color:var(--c0);font-size:10px">python backend.py</code>. Check that no other process is using port 8765.</div></div>
-            </div>
-
-            <div class="module-steps" style="margin-bottom:6px">
-              <div class="module-step-header" style="padding:12px 16px" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
-                <span style="font-size:12px;font-weight:600;color:var(--tx0)">Are scan results stored remotely?</span>
-                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
-              </div>
-              <div class="module-steps-body" style="padding:12px 16px"><div style="font-size:12px;color:var(--tx1);line-height:1.75">No. All results are stored in a local SQLite database managed by the Python backend on your machine. The frontend only communicates with <code style="font-family:var(--mono);color:var(--c0);font-size:10px">localhost:8765</code>. No data is sent to any external server by Pro Scanner itself.</div></div>
-            </div>
-
-            <div class="module-steps" style="margin-bottom:6px">
-              <div class="module-step-header" style="padding:12px 16px" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
-                <span style="font-size:12px;font-weight:600;color:var(--tx0)">Why do scans show false positives?</span>
-                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
-              </div>
-              <div class="module-steps-body" style="padding:12px 16px"><div style="font-size:12px;color:var(--tx1);line-height:1.75">The scanner uses heuristic pattern matching on server responses. WAFs, custom error pages, and applications that return similar responses regardless of input can all produce false positives. Always manually verify findings: confirm that the injection point actually affects application behavior and that returned data is genuinely sensitive.</div></div>
-            </div>
-
-            <div class="module-steps" style="margin-bottom:6px">
-              <div class="module-step-header" style="padding:12px 16px" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
-                <span style="font-size:12px;font-weight:600;color:var(--tx0)">How do I scan a URL without query parameters?</span>
-                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
-              </div>
-              <div class="module-steps-body" style="padding:12px 16px"><div style="font-size:12px;color:var(--tx1);line-height:1.75">The Vulnerability Scanner requires URLs with query parameters (e.g. <code style="font-family:var(--mono);color:var(--c0);font-size:10px">?id=1</code>). For pages without parameters, use <strong>Custom Tests</strong> to craft POST requests with a body payload, or use the <strong>API Scanner</strong> for REST endpoints. You can also manually add a dummy parameter to explore scanner behavior.</div></div>
-            </div>
-
-            <div class="module-steps" style="margin-bottom:6px">
-              <div class="module-step-header" style="padding:12px 16px" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
-                <span style="font-size:12px;font-weight:600;color:var(--tx0)">What is the difference between risk levels?</span>
+              <div class="module-step-header" style="padding:12px 16px"
+                onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
+                <span style="font-size:12px;font-weight:600;color:var(--tx0)">Why does the backend show as
+                  offline?</span>
                 <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
               </div>
               <div class="module-steps-body" style="padding:12px 16px">
-                <div style="font-size:12px;color:var(--tx1);line-height:1.75;margin-bottom:10px">Risk levels reflect both the severity of the vulnerability class and the confidence of the finding:</div>
+                <div style="font-size:12px;color:var(--tx1);line-height:1.75">The frontend pings <code
+                    style="font-family:var(--mono);color:var(--c0);font-size:10px">localhost:8765/api/scans</code> on
+                  load. If it times out, the backend process is not running. Open a terminal, navigate to the project
+                  directory, and run <code
+                    style="font-family:var(--mono);color:var(--c0);font-size:10px">python backend.py</code>. Check that
+                  no other process is using port 8765.</div>
+              </div>
+            </div>
+
+            <div class="module-steps" style="margin-bottom:6px">
+              <div class="module-step-header" style="padding:12px 16px"
+                onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
+                <span style="font-size:12px;font-weight:600;color:var(--tx0)">Are scan results stored remotely?</span>
+                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
+              </div>
+              <div class="module-steps-body" style="padding:12px 16px">
+                <div style="font-size:12px;color:var(--tx1);line-height:1.75">No. All results are stored in a local
+                  SQLite database managed by the Python backend on your machine. The frontend only communicates with
+                  <code style="font-family:var(--mono);color:var(--c0);font-size:10px">localhost:8765</code>. No data is
+                  sent to any external server by Pro Scanner itself.
+                </div>
+              </div>
+            </div>
+
+            <div class="module-steps" style="margin-bottom:6px">
+              <div class="module-step-header" style="padding:12px 16px"
+                onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
+                <span style="font-size:12px;font-weight:600;color:var(--tx0)">Why do scans show false positives?</span>
+                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
+              </div>
+              <div class="module-steps-body" style="padding:12px 16px">
+                <div style="font-size:12px;color:var(--tx1);line-height:1.75">The scanner uses heuristic pattern
+                  matching on server responses. WAFs, custom error pages, and applications that return similar responses
+                  regardless of input can all produce false positives. Always manually verify findings: confirm that the
+                  injection point actually affects application behavior and that returned data is genuinely sensitive.
+                </div>
+              </div>
+            </div>
+
+            <div class="module-steps" style="margin-bottom:6px">
+              <div class="module-step-header" style="padding:12px 16px"
+                onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
+                <span style="font-size:12px;font-weight:600;color:var(--tx0)">How do I scan a URL without query
+                  parameters?</span>
+                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
+              </div>
+              <div class="module-steps-body" style="padding:12px 16px">
+                <div style="font-size:12px;color:var(--tx1);line-height:1.75">The Vulnerability Scanner requires URLs
+                  with query parameters (e.g. <code
+                    style="font-family:var(--mono);color:var(--c0);font-size:10px">?id=1</code>). For pages without
+                  parameters, use <strong>Custom Tests</strong> to craft POST requests with a body payload, or use the
+                  <strong>API Scanner</strong> for REST endpoints. You can also manually add a dummy parameter to
+                  explore scanner behavior.
+                </div>
+              </div>
+            </div>
+
+            <div class="module-steps" style="margin-bottom:6px">
+              <div class="module-step-header" style="padding:12px 16px"
+                onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.faq-arrow').textContent=this.nextElementSibling.classList.contains('open')?'&#9650;':'&#9660;'">
+                <span style="font-size:12px;font-weight:600;color:var(--tx0)">What is the difference between risk
+                  levels?</span>
+                <span class="faq-arrow" style="font-size:10px;color:var(--tx3)">&#9660;</span>
+              </div>
+              <div class="module-steps-body" style="padding:12px 16px">
+                <div style="font-size:12px;color:var(--tx1);line-height:1.75;margin-bottom:10px">Risk levels reflect
+                  both the severity of the vulnerability class and the confidence of the finding:</div>
                 <div style="display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;align-items:flex-start;gap:10px"><span class="badge critical">Critical</span><span style="font-size:11px;color:var(--tx1)">Authentication bypass, direct database access, or remote code execution potential. Address immediately.</span></div>
-                  <div style="display:flex;align-items:flex-start;gap:10px"><span class="badge high">High</span><span style="font-size:11px;color:var(--tx1)">Significant data exposure or privilege escalation risk. Address within the current sprint.</span></div>
-                  <div style="display:flex;align-items:flex-start;gap:10px"><span class="badge medium">Medium</span><span style="font-size:11px;color:var(--tx1)">Reflected XSS, CORS issues, or configuration weaknesses. Address in the next release cycle.</span></div>
-                  <div style="display:flex;align-items:flex-start;gap:10px"><span class="badge low">Low</span><span style="font-size:11px;color:var(--tx1)">Information disclosure, missing security headers, or hardening recommendations. Track and remediate.</span></div>
+                  <div style="display:flex;align-items:flex-start;gap:10px"><span
+                      class="badge critical">Critical</span><span style="font-size:11px;color:var(--tx1)">Authentication
+                      bypass, direct database access, or remote code execution potential. Address immediately.</span>
+                  </div>
+                  <div style="display:flex;align-items:flex-start;gap:10px"><span class="badge high">High</span><span
+                      style="font-size:11px;color:var(--tx1)">Significant data exposure or privilege escalation risk.
+                      Address within the current sprint.</span></div>
+                  <div style="display:flex;align-items:flex-start;gap:10px"><span
+                      class="badge medium">Medium</span><span style="font-size:11px;color:var(--tx1)">Reflected XSS,
+                      CORS issues, or configuration weaknesses. Address in the next release cycle.</span></div>
+                  <div style="display:flex;align-items:flex-start;gap:10px"><span class="badge low">Low</span><span
+                      style="font-size:11px;color:var(--tx1)">Information disclosure, missing security headers, or
+                      hardening recommendations. Track and remediate.</span></div>
                 </div>
               </div>
             </div>
@@ -2226,7 +3688,7 @@
       </div>
     </div>
 
-        <!-- ══ SSL CHECKER ══ -->
+    <!-- ══ SSL CHECKER ══ -->
     <div id="page-ssl" class="page">
       <div class="ph">
         <div class="ph-breadcrumb">SCAN / SSL</div>
@@ -2247,7 +3709,9 @@
               <input class="tinput" id="sslUrl" type="text" placeholder="https://example.com or example.com">
             </div>
             <button class="tbtn" id="sslBtn" onclick="runSSLCheck()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
               CHECK SSL
             </button>
           </div>
@@ -2267,7 +3731,8 @@
       <div class="ph">
         <div class="ph-breadcrumb">SCAN / API</div>
         <div class="ph-title">API Security Scanner</div>
-        <div class="ph-sub">Probe REST/JSON endpoints with GET and POST to spot open access, CORS misconfiguration, and sensitive data patterns.</div>
+        <div class="ph-sub">Probe REST/JSON endpoints with GET and POST to spot open access, CORS misconfiguration, and
+          sensitive data patterns.</div>
       </div>
 
       <div class="tpanel">
@@ -2283,13 +3748,16 @@
               <input class="tinput" id="apiBaseUrl" type="text" placeholder="https://api.example.com/v1">
             </div>
             <button type="button" class="tbtn" id="apiScanBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
               SCAN API
             </button>
           </div>
           <label class="tinput-label" style="margin-top:14px">Paths to probe (one per line, optional)</label>
           <textarea class="paths-area" id="apiPaths" placeholder="/api/users&#10;/api/health&#10;/graphql"></textarea>
-          <p class="tool-hint">Leave blank to use a built-in probe list. Only test targets you are authorized to assess. Results are heuristics — confirm manually.</p>
+          <p class="tool-hint">Leave blank to use a built-in probe list. Only test targets you are authorized to assess.
+            Results are heuristics — confirm manually.</p>
         </div>
       </div>
 
@@ -2301,7 +3769,9 @@
               <span class="progress-label" id="apiProgressLabel">Preparing…</span>
               <span class="progress-pct" id="apiProgressPct">0%</span>
             </div>
-            <div class="pbar-bg"><div class="pbar-fill" id="apiPbarFill"></div></div>
+            <div class="pbar-bg">
+              <div class="pbar-fill" id="apiPbarFill"></div>
+            </div>
             <div class="live-log" id="apiScanLog" style="margin-top:10px"></div>
           </div>
         </div>
@@ -2312,24 +3782,35 @@
         <div class="grid-2" style="margin-bottom:14px">
           <div class="tpanel" style="margin-bottom:0">
             <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SECURITY SCORE</span></div>
-            <div class="tpanel-body"><div id="apiScoreWrap" style="display:flex;align-items:center;gap:18px;padding:8px 0"></div></div>
+            <div class="tpanel-body">
+              <div id="apiScoreWrap" style="display:flex;align-items:center;gap:18px;padding:8px 0"></div>
+            </div>
           </div>
           <div class="tpanel" style="margin-bottom:0">
-            <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SEVERITY BREAKDOWN</span></div>
-            <div class="tpanel-body"><div id="apiSevBreakdown" style="margin-top:4px"></div></div>
+            <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SEVERITY BREAKDOWN</span>
+            </div>
+            <div class="tpanel-body">
+              <div id="apiSevBreakdown" style="margin-top:4px"></div>
+            </div>
           </div>
         </div>
         <div class="tpanel" style="margin-bottom:14px">
           <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SUMMARY</span></div>
-          <div class="tpanel-body"><div id="apiSecSummary" style="font-size:11px;color:var(--tx2);line-height:1.7"></div></div>
+          <div class="tpanel-body">
+            <div id="apiSecSummary" style="font-size:11px;color:var(--tx2);line-height:1.7"></div>
+          </div>
         </div>
         <div class="tpanel" style="margin-bottom:14px">
           <div class="tpanel-header"><span class="tph-sym">!</span><span class="tph-title">FINDINGS</span></div>
-          <div class="tpanel-body"><div id="apiSecFindings"></div></div>
+          <div class="tpanel-body">
+            <div id="apiSecFindings"></div>
+          </div>
         </div>
         <div class="tpanel">
           <div class="tpanel-header"><span class="tph-sym">=</span><span class="tph-title">ENDPOINTS</span></div>
-          <div class="tpanel-body"><div id="apiSecEndpoints"></div></div>
+          <div class="tpanel-body">
+            <div id="apiSecEndpoints"></div>
+          </div>
         </div>
         <div id="apiSecFixBox" style="margin-top:12px"></div>
       </div>
@@ -2353,11 +3834,16 @@
               <input class="tinput" id="portTargetUrl" type="text" placeholder="https://example.com or example.com">
             </div>
             <button class="tbtn" id="portScanBtn" onclick="runPortScan()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
               SCAN PORTS
             </button>
           </div>
-          <p class="tool-hint" style="margin-top:10px">Scans 15 common ports (FTP, SSH, HTTP, databases). Only test systems you own or have permission to scan.</p>
+          <p class="tool-hint" style="margin-top:10px">Scans 15 common ports (FTP, SSH, HTTP, databases). Only test
+            systems you own or have permission to scan.</p>
         </div>
       </div>
 
@@ -2369,7 +3855,9 @@
               <span class="progress-label" id="portProgressLabel">Resolving domain…</span>
               <span class="progress-pct" id="portProgressPct">0%</span>
             </div>
-            <div class="pbar-bg"><div class="pbar-fill" id="portPbarFill"></div></div>
+            <div class="pbar-bg">
+              <div class="pbar-fill" id="portPbarFill"></div>
+            </div>
             <div class="live-log" id="portLog" style="margin-top:10px"></div>
           </div>
         </div>
@@ -2380,16 +3868,21 @@
         <div class="grid-2" style="margin-bottom:14px">
           <div class="tpanel" style="margin-bottom:0">
             <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SCAN SUMMARY</span></div>
-            <div class="tpanel-body"><div class="stat-grid" id="portStats" style="grid-template-columns:repeat(3,1fr);margin-bottom:0"></div></div>
+            <div class="tpanel-body">
+              <div class="stat-grid" id="portStats" style="grid-template-columns:repeat(3,1fr);margin-bottom:0"></div>
+            </div>
           </div>
           <div class="tpanel" style="margin-bottom:0">
             <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">TARGET INFO</span></div>
-            <div class="tpanel-body"><div id="portTargetInfo"></div></div>
+            <div class="tpanel-body">
+              <div id="portTargetInfo"></div>
+            </div>
           </div>
         </div>
         <div class="tpanel" style="margin-bottom:14px">
           <div class="tpanel-header" style="justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:8px"><span class="tph-sym">=</span><span class="tph-title">PORT RESULTS</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span class="tph-sym">=</span><span
+                class="tph-title">PORT RESULTS</span></div>
             <div style="display:flex;gap:6px">
               <button class="tbtn tbtn-sm" onclick="filterPorts('all',this)">ALL</button>
               <button class="tbtn tbtn-sm tbtn-muted" onclick="filterPorts('open',this)">OPEN</button>
@@ -2400,8 +3893,11 @@
           <div id="portGrid"></div>
         </div>
         <div class="tpanel" style="margin-bottom:14px">
-          <div class="tpanel-header"><span class="tph-sym">!</span><span class="tph-title">SECURITY FINDINGS</span></div>
-          <div class="tpanel-body"><div id="portFindings"></div></div>
+          <div class="tpanel-header"><span class="tph-sym">!</span><span class="tph-title">SECURITY FINDINGS</span>
+          </div>
+          <div class="tpanel-body">
+            <div id="portFindings"></div>
+          </div>
         </div>
         <div id="portFixBox"></div>
       </div>
@@ -2418,7 +3914,8 @@
       <div class="dash-section-label">// SCANNER INTELLIGENCE</div>
       <div class="grid-2">
         <div class="tpanel" style="margin-bottom:0">
-          <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">VULNS BY CATEGORY</span></div>
+          <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">VULNS BY CATEGORY</span>
+          </div>
           <div class="tpanel-body">
             <p class="dash-chart-hint">Each row: test category — total tests run vs findings flagged vulnerable.</p>
             <canvas id="dashCatCanvas" height="240"></canvas>
@@ -2433,7 +3930,8 @@
         </div>
       </div>
       <div class="tpanel" style="margin-bottom:14px;margin-top:14px">
-        <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SCANNER ACTIVITY · LAST 14 DAYS</span></div>
+        <div class="tpanel-header"><span class="tph-sym">~</span><span class="tph-title">SCANNER ACTIVITY · LAST 14
+            DAYS</span></div>
         <div class="tpanel-body">
           <p class="dash-chart-hint">Blue bars = scanner jobs finished. Coral = total vulnerability findings.</p>
           <canvas id="dashTimeCanvas" height="200"></canvas>
@@ -2457,8 +3955,11 @@
         </div>
       </div>
       <div class="tpanel" style="margin-top:14px">
-        <div class="tpanel-header"><span class="tph-sym">=</span><span class="tph-title">RECENT SCANNER JOBS</span></div>
-        <div class="tpanel-body"><div id="dashRecent"></div></div>
+        <div class="tpanel-header"><span class="tph-sym">=</span><span class="tph-title">RECENT SCANNER JOBS</span>
+        </div>
+        <div class="tpanel-body">
+          <div id="dashRecent"></div>
+        </div>
       </div>
     </div>
 
@@ -2500,10 +4001,16 @@
         <div class="tpanel-header"><span class="tph-sym">#</span><span class="tph-title">SELECT SCAN</span></div>
         <div class="tpanel-body">
           <div style="display:flex;gap:10px;align-items:flex-end">
-            <div style="flex:1"><select id="reportSelect"><option value="">— choose a scan —</option></select></div>
+            <div style="flex:1"><select id="reportSelect">
+                <option value="">— choose a scan —</option>
+              </select></div>
             <button class="tbtn" onclick="loadReport()" style="padding:10px 16px">LOAD</button>
             <button class="pdf-btn" onclick="downloadCurrentPDF()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
               EXPORT PDF
             </button>
           </div>
@@ -2533,7 +4040,14 @@
         </div>
         <table>
           <thead>
-            <tr><th>ID</th><th>Name</th><th>Category</th><th>Type</th><th>Payload</th><th>Risk</th></tr>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Type</th>
+              <th>Payload</th>
+              <th>Risk</th>
+            </tr>
           </thead>
           <tbody id="payloadsBody"></tbody>
         </table>
@@ -2562,16 +4076,16 @@
       { name: 'SQL Injection', icon: '🗄', count: 17 },
       { name: 'XSS', icon: '🔗', count: 6 },
       { name: 'Path Traversal', icon: '📂', count: 5 },
-      { name: 'Command Injection', icon: '💻', count: 6 },
-      { name: 'SSTI', icon: '🔧', count: 4 },
-      { name: 'Open Redirect', icon: '↗', count: 3 },
-      { name: 'XXE', icon: '📄', count: 2 },
-      { name: 'SSRF', icon: '🌐', count: 3 },
-      { name: 'NoSQL Injection', icon: '🍃', count: 3 },
-      { name: 'Header Injection', icon: '📨', count: 2 },
-      { name: 'Prototype Pollution', icon: '⚙', count: 2 },
-      { name: 'LDAP Injection', icon: '📁', count: 2 },
-      { name: 'GraphQL', icon: '🔷', count: 1 },
+      // { name: 'Command Injection', icon: '💻', count: 6 },
+      // { name: 'SSTI', icon: '🔧', count: 4 },
+      // { name: 'Open Redirect', icon: '↗', count: 3 },
+      // { name: 'XXE', icon: '📄', count: 2 },
+      // { name: 'SSRF', icon: '🌐', count: 3 },
+      // { name: 'NoSQL Injection', icon: '🍃', count: 3 },
+      // { name: 'Header Injection', icon: '📨', count: 2 },
+      // { name: 'Prototype Pollution', icon: '⚙', count: 2 },
+      // { name: 'LDAP Injection', icon: '📁', count: 2 },
+      // { name: 'GraphQL', icon: '🔷', count: 1 },
       { name: 'SSL/TLS', icon: '🔒', count: 1 },
     ];
 
@@ -3521,12 +5035,12 @@
       mq.innerHTML = '';
       if (parts[0]) {
         const
-        s = document.createElement('span'); s.className = 'sim-normal'; s.textContent = parts[0]; mq.appendChild(s);
+          s = document.createElement('span'); s.className = 'sim-normal'; s.textContent = parts[0]; mq.appendChild(s);
       }
       const inj = document.createElement('span'); inj.className = 'sim-inject'; inj.textContent = a.payload; mq.appendChild(inj);
       if (parts[1]) {
         const
-        s = document.createElement('span'); s.className = 'sim-normal'; s.textContent = parts[1]; mq.appendChild(s);
+          s = document.createElement('span'); s.className = 'sim-normal'; s.textContent = parts[1]; mq.appendChild(s);
       }
 
       document.getElementById('simNormalResp').textContent = a.normal_resp;
@@ -3789,7 +5303,7 @@
           <div class="metric-card mc-purple">
             <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
             <div class="metric-num">${ct}</div>
-            <div class="metric-lbl">Saved custom tests</div>
+            // <div class="metric-lbl">Saved custom tests</div>
           </div>
           <div class="metric-card mc-cyan">
             <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
@@ -4221,4 +5735,5 @@
 
   </script>
 </body>
+
 </html>
