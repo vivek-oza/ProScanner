@@ -19,6 +19,52 @@ MAX_CONCURRENT_SCANS = 3
 
 scan_semaphore = threading.Semaphore(MAX_CONCURRENT_SCANS)
 
+# ── AI Chat OpenRouter Helper ──────────────────────────────────────────────────
+OPENROUTER_API_KEY = "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"
+
+def call_openrouter(messages: list) -> str:
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost:8765",
+        "X-Title": "ProScanner AI Assistant"
+    }
+    
+    # Use google/gemini-2.5-flash:free for fast, free, and highly accurate security analysis
+    # Limit the conversation history to the last 10 messages to keep token usage low
+    # Keep only the system message and the most recent user/assistant message to stay within token limits
+    if len(messages) > 2:
+        # messages[0] is the system message; keep it and the last message
+        trimmed_messages = [messages[0]] + [messages[-1]]
+    else:
+        trimmed_messages = messages
+    data = {
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "messages": trimmed_messages,
+        "max_tokens": 500
+    }
+    
+    try:
+        req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=35) as resp:
+            resp_data = json.loads(resp.read().decode("utf-8"))
+            choices = resp_data.get("choices", [])
+            if choices:
+                return choices[0].get("message", {}).get("content", "Error: Empty response content from model.")
+            return "Error: Empty choices list returned by AI provider."
+    except urllib.error.HTTPError as e:
+        try:
+            err_body = e.read().decode("utf-8")
+        except:
+            err_body = str(e)
+        add_log(f"OpenRouter HTTP Error: {e.code} - {err_body}", "ERROR", "AI_CHAT")
+        return f"Error: OpenRouter API returned code {e.code}. Details: {err_body}"
+    except Exception as ex:
+        add_log(f"OpenRouter Exception: {ex}", "ERROR", "AI_CHAT")
+        return f"Error connecting to AI assistant: {ex}"
+
+
 # ── Structured logger ──────────────────────────────────────────────────────────
 logs: list[dict] = []
 log_lock = threading.Lock()
@@ -262,6 +308,19 @@ OWASP_FIXES = {
              "detail": "Avoid Access-Control-Allow-Origin: * for credentialed APIs; allowlist origins."},
         ]
     },
+    "Information Disclosure": {
+        "owasp": "A01:2021 – Broken Access Control / A05:2021 - Security Misconfiguration",
+        "severity": "High",
+        "description": "Sensitive server files, environment variables, git history, or database backups are exposed to the public.",
+        "fixes": [
+            {"title": "Restrict Directory/File Access",
+             "detail": "Configure web server rules (Nginx, Apache, IIS) to block access to sensitive files (e.g. .git, .env, backups)."},
+            {"title": "Do Not Deploy Source Repositories or Environment Files to Production",
+             "detail": "Build artefacts and exclude configuration files or source repositories from web-accessible directories."},
+            {"title": "Use Environment Variables Properly",
+             "detail": "Use container env configurations rather than exposing static text env files in web directories."},
+        ]
+    },
 }
 
 # ── SSRF guard ─────────────────────────────────────────────────────────────────
@@ -361,6 +420,15 @@ VULNERABILITY_TESTS = [
     {"id":"ldap-02","name":"LDAP OR bypass","payload":"*)|(cn=*","category":"LDAP Injection","type":"OR Bypass","risk":"High"},
 
     {"id":"gql-01","name":"GraphQL introspection","payload":"{__schema{types{name}}}","category":"GraphQL","type":"Introspection","risk":"Medium"},
+
+    {"id":"sqli-auth-05","name":"Boolean-based admin bypass","payload":"admin' --","category":"SQL Injection","type":"Error/Boolean","risk":"Critical"},
+    {"id":"xss-ref-07","name":"HTML5 autofocus onfocus","payload":"<input autofocus onfocus=alert(1)>","category":"XSS","type":"Reflected","risk":"High"},
+    {"id":"trav-06","name":"Windows system.ini","payload":"../../../../windows/system.ini","category":"Path Traversal","type":"LFI","risk":"High"},
+
+    {"id":"info-disc-01","name":"Git configuration exposure","payload":".git/config","category":"Information Disclosure","type":"File Leak","risk":"High"},
+    {"id":"info-disc-02","name":"Environment file exposure","payload":".env","category":"Information Disclosure","type":"File Leak","risk":"Critical"},
+    {"id":"info-disc-03","name":"Backup file exposure","payload":"backup.sql","category":"Information Disclosure","type":"File Leak","risk":"High"},
+    {"id":"info-disc-04","name":"Docker compose exposure","payload":"docker-compose.yml","category":"Information Disclosure","type":"File Leak","risk":"Medium"},
 ]
 
 # ── Error pattern signatures ───────────────────────────────────────────────────
@@ -381,6 +449,17 @@ ERROR_SIGNATURES = [
     (r"\b49\b", "SSTI arithmetic result (7*7=49)"),
     (r"root:x:0:0:", "LFI: /etc/passwd content"),
     (r"uid=\d+\(.*\) gid=\d+", "Command injection: id output"),
+    (r"\[386enh\]|\[drivers\]|\[keyboards\]", "LFI: Windows system.ini content"),
+    (r"\[extensions\]|\[fonts\]|\[Mail\]", "LFI: Windows win.ini content"),
+    (r"ami-id|instance-id|security-credentials", "AWS Metadata Exposure"),
+    (r"computeMetadata/v1", "GCP Metadata Exposure"),
+    (r"MongoError:|MongoDB\.Driver|Cannot read property '\$ne' of undefined|MongoServerError", "MongoDB / NoSQL error"),
+    (r"LDAPException|LdapErr:|SearchResultReference|IPWorksASP\.LDAP", "LDAP error"),
+    (r"\"__schema\"|\"__typename\"|GraphQL query max depth exceeded", "GraphQL Schema Exposure"),
+    (r"\[repositoryformatversion\]|\[core\]|\[remote \"origin\"\]", "Information Disclosure: Git config exposed"),
+    (r"DB_PASSWORD=|AWS_SECRET_ACCESS_KEY=|DB_HOST=", "Information Disclosure: Environment file (.env) exposed"),
+    (r"CREATE TABLE.*INSERT INTO|PostgreSQL database dump|MySQL dump", "Information Disclosure: SQL backup exposed"),
+    (r"version:\s*['\"]?\d['\"]?\s*services:", "Information Disclosure: Docker Compose config exposed"),
 ]
 
 # ── SSL / HTTPS Checker ────────────────────────────────────────────────────────
@@ -922,15 +1001,38 @@ def _http_get(url, timeout=REQUEST_TIMEOUT):
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             elapsed = time.monotonic() - start
             body = resp.read(16384).decode("utf-8", errors="replace")
-            return {"ok":True,"status":resp.status,"body":body,"time":round(elapsed,3)}
+            return {
+                "ok": True,
+                "status": resp.status,
+                "body": body,
+                "time": round(elapsed, 3),
+                "url": resp.geturl(),
+                "headers": {k.lower(): v for k, v in resp.headers.items()}
+            }
     except urllib.error.HTTPError as e:
         elapsed = time.monotonic() - start
         try: body = e.read(8192).decode("utf-8", errors="replace")
         except: body = ""
-        return {"ok":False,"status":e.code,"body":body,"time":round(elapsed,3),"error":str(e)}
+        return {
+            "ok": False,
+            "status": e.code,
+            "body": body,
+            "time": round(elapsed, 3),
+            "error": str(e),
+            "url": e.url,
+            "headers": {k.lower(): v for k, v in e.headers.items()} if e.headers else {}
+        }
     except Exception as ex:
         elapsed = time.monotonic() - start
-        return {"ok":False,"status":None,"body":"","time":round(elapsed,3),"error":str(ex)}
+        return {
+            "ok": False,
+            "status": None,
+            "body": "",
+            "time": round(elapsed, 3),
+            "error": str(ex),
+            "url": url,
+            "headers": {}
+        }
 
 def _inject_url(base_url, param, payload):
     p = urllib.parse.urlparse(base_url)
@@ -967,6 +1069,24 @@ def test_single(base_url, param, test, baseline):
         "injected_url": inj_url,
         "fix": OWASP_FIXES.get(test["category"], {}),
     }
+
+    # Custom Redirect Check for Open Redirect
+    if test["category"] == "Open Redirect":
+        final_url = result.get("url", "")
+        if "evil.com" in final_url:
+            finding.update(vulnerable=True, confidence="high", evidence="Redirected to unauthorized target (evil.com)", reason="open_redirect")
+            return finding
+        location = result.get("headers", {}).get("location", "")
+        if "evil.com" in location:
+            finding.update(vulnerable=True, confidence="high", evidence=f"Location header redirects to: {location}", reason="open_redirect")
+            return finding
+
+    # Custom Header Injection check
+    if test["category"] == "Header Injection":
+        set_cookie = result.get("headers", {}).get("set-cookie", "")
+        if "session=malicious" in set_cookie:
+            finding.update(vulnerable=True, confidence="high", evidence="Set-Cookie header was successfully injected", reason="header_injection")
+            return finding
 
     for pattern, label in ERROR_SIGNATURES:
         if re.search(pattern, body, re.IGNORECASE):
@@ -1274,21 +1394,18 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0]
         if path == "/":
-            for name in ("index_redesigned.html", "index.html"):
-                try:
-                    with open(name, "r", encoding="utf-8") as f:
-                        html = f.read().encode()
-                    self.send_response(200)
-                    self.send_header("Content-Type", "text/html; charset=utf-8")
-                    self.send_header("Content-Length", str(len(html)))
-                    self._cors()
-                    self.end_headers()
-                    self.wfile.write(html)
-                    break
-                except FileNotFoundError:
-                    continue
-            else:
-                self.send_json({"error": "No index_redesigned.html or index.html found"}, 404)
+            try:
+                with open("index.html", "r", encoding="utf-8") as f:
+                    html = f.read().encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(html)))
+                self._cors()
+                self.end_headers()
+                self.wfile.write(html)
+            except FileNotFoundError:
+                self.send_json({"error": "index.html not found"}, 404)
+        elif path == "/api/scans":        self.send_json(get_all_scans())
         elif path == "/api/scans":        self.send_json(get_all_scans())
         elif path.startswith("/api/scans/"):
             try:
@@ -1395,13 +1512,33 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({"id":tid,"created":True})
             except json.JSONDecodeError: self.send_json({"error":"Invalid JSON"},400)
             except Exception as e: self.send_json({"error":str(e)},500)
-        elif path.startswith("/api/custom_tests/") and path.endswith("/run"):
+        elif path == "/api/chat":
             try:
-                tid = int(path.split("/")[-2])
-                result = run_custom_test(tid)
-                self.send_json(result)
-            except ValueError as e: self.send_json({"error":str(e)},422)
-            except Exception as e: self.send_json({"error":str(e)},500)
+                length = int(self.headers.get("Content-Length", 0) or 0)
+                if length > 32768: self.send_json({"error": "Payload too large"}, 413); return
+                data = json.loads(self.rfile.read(length).decode("utf-8")) if length else {}
+                client_messages = data.get("messages", [])
+                context = data.get("context", {})
+                if not client_messages:
+                    self.send_json({"error": "messages array is required"}, 400); return
+                
+                # Concise system prompt for short, useful answers
+                system_message = "You are the AI assistant for Pro Scanner, a local-first web security platform, dedicated to helping users interpret local scan results (SQLi, XSS, APIs, Ports), troubleshoot test modules, and implement defensive code remediation."
+  
+                messages = [{"role": "system", "content": system_message}]
+                # Limit client messages to last 5 entries to stay within token limits
+                client_messages = client_messages[-5:] if len(client_messages) > 5 else client_messages
+                for m in client_messages:
+                    if isinstance(m, dict) and "role" in m and "content" in m:
+                        messages.append({"role": m["role"], "content": m["content"]})
+                        
+                ai_response = call_openrouter(messages)
+                self.send_json({"response": ai_response})
+            except json.JSONDecodeError:
+                self.send_json({"error": "Invalid JSON"}, 400)
+            except Exception as e:
+                add_log(f"Chat API error: {e}", "ERROR", "API")
+                self.send_json({"error": str(e)}, 500)
         else: self.send_json({"error":"Not found"},404)
 
     def do_DELETE(self):

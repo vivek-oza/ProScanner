@@ -174,7 +174,9 @@
     .nav {
       flex: 1;
       padding: 12px 8px;
-      overflow-y: auto
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
 
     .nav-section {
@@ -2558,23 +2560,350 @@
       }
     }
 
-    @media (max-width: 900px) {
-      .stat-grid {
-        grid-template-columns: repeat(2, 1fr)
-      }
+    /* ── LOGIN OVERLAY ── */
+    #login-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 100vh;
+      min-width: 100vw;
+    }
+    #login-overlay.hide {
+      animation: loginFadeOut .35s ease forwards;
+      pointer-events: none;
+    }
+    @keyframes loginFadeOut {
+      to { opacity: 0; transform: scale(.97); }
+    }
+    .login-card {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 40px 36px 36px;
+      width: 340px;
+      position: relative;
+    }
+    .login-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .login-logo-sigil {
+      font-family: var(--mono2);
+      font-size: 36px;
+      color: var(--c0);
+      line-height: 1;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .login-logo-name {
+      font-family: var(--mono2);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--tx0);
+      letter-spacing: .07em;
+    }
+    .login-logo-sub {
+      font-size: 10px;
+      color: var(--tx3);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .login-field {
+      margin-bottom: 14px;
+    }
+    .login-field label {
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--tx2);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .login-field input {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 5px;
+      color: var(--tx0);
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .login-field input:focus {
+      border-color: var(--c1);
+      box-shadow: 0 0 0 3px rgba(96,165,250,.12);
+    }
+    .login-hint {
+      font-size: 10px;
+      color: var(--tx3);
+      margin-top: 3px;
+      font-family: var(--mono);
+    }
+    .login-btn {
+      width: 100%;
+      margin-top: 6px;
+      padding: 12px;
+      background: var(--c1);
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-family: var(--mono2);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .login-btn:hover { background: #5cb8ff; }
+    .login-btn:active { transform: scale(.98); }
+    .login-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .login-err {
+      color: var(--r0);
+      font-size: 11px;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 18px;
+      font-family: var(--mono);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .login-err.show { opacity: 1; }
+    .login-success {
+      color: var(--g0);
+      font-size: 11px;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 18px;
+      font-family: var(--mono);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .login-success.show { opacity: 1; }
 
-      .grid-2 {
-        grid-template-columns: 1fr
-      }
+    /* ── AI CHAT PANEL ── */
+    #chat-panel {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      bottom: 0;
+      background: var(--panel);
+      border-left: 1px solid var(--border2);
+      display: flex;
+      flex-direction: column;
+      z-index: 800;
+      transition: right .3s cubic-bezier(.4,0,.2,1);
+    }
+    #chat-panel.open { right: 0; }
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border2);
+      flex-shrink: 0;
+    }
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .chat-header-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(92,184,255,.15);
+      border: 1px solid rgba(92,184,255,.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--c0);
+    }
+    .chat-header-title {
+      font-family: var(--mono2);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--tx0);
+    }
+    .chat-header-sub {
+      font-size: 9px;
+      color: var(--tx3);
+      margin-top: 1px;
+    }
+    .chat-close-btn {
+      background: none;
+      border: none;
+      color: var(--tx3);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color .13s, background .13s;
+    }
+    .chat-close-btn:hover { color: var(--tx0); background: var(--surface); }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 92%;
+    }
+    .chat-msg.user { align-self: flex-end; align-items: flex-end; }
+    .chat-msg.ai { align-self: flex-start; align-items: flex-start; }
+    .chat-bubble {
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.65;
+      font-family: var(--mono);
+      word-break: break-word;
+    }
+    .chat-msg.user .chat-bubble {
+      background: rgba(92,184,255,.18);
+      border: 1px solid rgba(92,184,255,.22);
+      color: var(--tx0);
+      border-radius: 10px 10px 2px 10px;
+    }
+    .chat-msg.ai .chat-bubble {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--tx1);
+      border-radius: 10px 10px 10px 2px;
+    }
+    .chat-msg-label {
+      font-size: 9px;
+      color: var(--tx3);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .chat-input-area {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border2);
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    .chat-textarea {
+      flex: 1;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      color: var(--tx0);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 9px 12px;
+      resize: none;
+      outline: none;
+      min-height: 40px;
+      max-height: 120px;
+      transition: border-color .15s;
+      line-height: 1.5;
+    }
+    .chat-textarea:focus { border-color: var(--c1); }
+    .chat-send-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--c1);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .13s;
+      flex-shrink: 0;
+    }
+    .chat-send-btn:hover { background: var(--c0); }
+    .chat-send-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .chat-toggle-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      background: var(--c1);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 799;
+      box-shadow: 0 4px 16px rgba(92,184,255,.35);
+      transition: background .13s, transform .13s;
+    }
+    .chat-toggle-btn:hover { background: var(--c0); transform: scale(1.08); }
+    .chat-toggle-btn.panel-open { right: 424px; }
+    .chat-typing {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--tx3);
+    }
+    .chat-typing.show { display: flex; }
+    .chat-typing-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--c0);
+      animation: chatDot 1.2s infinite;
+    }
+    .chat-typing-dot:nth-child(2) { animation-delay: .2s; }
+    .chat-typing-dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes chatDot {
+      0%,100% { opacity: .2; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-3px); }
+    }
+    .chat-empty-hint {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--tx3);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+    .chat-empty-hint .hint-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .chat-suggestion {
+      display: inline-block;
+      margin: 3px;
+      padding: 5px 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      font-size: 10px;
+      color: var(--tx1);
+      cursor: pointer;
+      transition: all .12s;
+    }
+    .chat-suggestion:hover { border-color: var(--c0); color: var(--c0); }
 
-      .sim-body {
-        grid-template-columns: 1fr
-      }
-
-      .sim-panel:first-child {
-        border-right: none;
-        border-bottom: 1px solid var(--border2)
-      }
+    /* dim main when chat open */
+    #app-shell.chat-dimmed .main {
+      transition: filter .3s;
+      filter: brightness(.85);
     }
 
     @media (max-width: 700px) {
@@ -2599,6 +2928,90 @@
 </head>
 
 <body>
+
+  <!-- ══ LOGIN OVERLAY ══ -->
+  <div id="login-overlay">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="login-logo-sigil">[>_]</span>
+        <div class="login-logo-name">PROSCANNER</div>
+        <div class="login-logo-sub">v4.0 // Security Terminal</div>
+      </div>
+      <div class="login-field">
+        <label for="loginUser">Username</label>
+        <input id="loginUser" type="text" value="admin" autocomplete="username" spellcheck="false" />
+        <div class="login-hint">Default: admin</div>
+      </div>
+      <div class="login-field">
+        <label for="loginPass">Password</label>
+        <input id="loginPass" type="password" value="1234" autocomplete="current-password" />
+        <div class="login-hint">Default: 1234</div>
+      </div>
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">Login</button>
+      <div class="login-err" id="loginErr"></div>
+      <div class="login-success" id="loginSuccess"></div>
+    </div>
+  </div>
+
+  <!-- ══ APP SHELL (hidden until login) ══ -->
+  <div id="app-shell" style="display:none">
+
+  <!-- ══ CHAT PANEL ══ -->
+  <div id="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="chat-header-title">AI Assistant</div>
+          <div class="chat-header-sub">Ask about tests, payloads & findings</div>
+        </div>
+      </div>
+      <button class="chat-close-btn" onclick="toggleChat()" title="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-empty-hint" id="chatEmptyHint">
+        <span class="hint-icon">🔍</span>
+        Ask me anything about your security scans,
+        payloads, test results, or how to fix findings.
+        <div style="margin-top:12px">
+          <span class="chat-suggestion" onclick="chatSuggest(this)">What does SQL Injection mean?</span>
+          <span class="chat-suggestion" onclick="chatSuggest(this)">How do I fix XSS?</span>
+          <span class="chat-suggestion" onclick="chatSuggest(this)">Explain the last scan results</span>
+          <span class="chat-suggestion" onclick="chatSuggest(this)">What payloads are used?</span>
+        </div>
+      </div>
+    </div>
+    <div class="chat-typing" id="chatTyping">
+      <div class="chat-typing-dot"></div>
+      <div class="chat-typing-dot"></div>
+      <div class="chat-typing-dot"></div>
+      <span style="margin-left:4px">AI is thinking…</span>
+    </div>
+    <div class="chat-input-area">
+      <textarea class="chat-textarea" id="chatInput" placeholder="Ask about scans, payloads, findings…" rows="1"
+        onkeydown="chatKeyDown(event)"></textarea>
+      <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()" title="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat toggle floating button -->
+  <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()" title="AI Assistant">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
 
   <!-- ══ SIDEBAR ══ -->
   <nav class="sidebar">
@@ -2628,10 +3041,6 @@
         <span class="nav-prefix">&gt;</span>
         <span>Port Scan</span>
       </div>
-      <div class="nav-link" data-page="custom-tests">
-        <span class="nav-prefix">&gt;</span>
-        <!-- <span>Custom Tests</span> -->
-      </div>
 
       <div class="nav-section">// INTEL</div>
       <div class="nav-link" data-page="dashboard">
@@ -2653,6 +3062,12 @@
       <div class="nav-link" data-page="simulation">
         <span class="nav-prefix">&gt;</span>
         <span>Help &amp; Guide</span>
+      </div>
+
+      <!-- Logout trigger -->
+      <div class="nav-link" style="margin-top: auto; border-top: 1px solid var(--border); padding-top: 12px; color: var(--r0);" onclick="logoutOperator()">
+        <span class="nav-prefix" style="color: var(--r0)">&lt;</span>
+        <span>Logout</span>
       </div>
     </div>
 
@@ -4073,19 +4488,20 @@
 
     // ── Data ──
     const TEST_CATEGORIES = [
-      { name: 'SQL Injection', icon: '🗄', count: 17 },
-      { name: 'XSS', icon: '🔗', count: 6 },
-      { name: 'Path Traversal', icon: '📂', count: 5 },
-      // { name: 'Command Injection', icon: '💻', count: 6 },
-      // { name: 'SSTI', icon: '🔧', count: 4 },
-      // { name: 'Open Redirect', icon: '↗', count: 3 },
-      // { name: 'XXE', icon: '📄', count: 2 },
-      // { name: 'SSRF', icon: '🌐', count: 3 },
-      // { name: 'NoSQL Injection', icon: '🍃', count: 3 },
-      // { name: 'Header Injection', icon: '📨', count: 2 },
-      // { name: 'Prototype Pollution', icon: '⚙', count: 2 },
-      // { name: 'LDAP Injection', icon: '📁', count: 2 },
-      // { name: 'GraphQL', icon: '🔷', count: 1 },
+      { name: 'SQL Injection', icon: '🗄', count: 18 },
+      { name: 'XSS', icon: '🔗', count: 7 },
+      { name: 'Path Traversal', icon: '📂', count: 6 },
+      { name: 'Command Injection', icon: '💻', count: 6 },
+      { name: 'SSTI', icon: '🔧', count: 4 },
+      { name: 'Open Redirect', icon: '↗', count: 3 },
+      { name: 'XXE', icon: '📄', count: 2 },
+      { name: 'SSRF', icon: '🌐', count: 3 },
+      { name: 'NoSQL Injection', icon: '🍃', count: 3 },
+      { name: 'Header Injection', icon: '📨', count: 2 },
+      { name: 'Prototype Pollution', icon: '⚙', count: 2 },
+      { name: 'LDAP Injection', icon: '📁', count: 2 },
+      { name: 'GraphQL', icon: '🔷', count: 1 },
+      { name: 'Information Disclosure', icon: '📂', count: 4 },
       { name: 'SSL/TLS', icon: '🔒', count: 1 },
     ];
 
@@ -5720,7 +6136,7 @@
     initSim();
     wireToolButtons();
     // ── Backend status check ──
-    (async function checkBackend() {
+    async function checkBackend() {
       try {
         await fetch(API + '/api/scans', { signal: AbortSignal.timeout(2000) });
         const dot = document.getElementById('statusDot');
@@ -5731,9 +6147,208 @@
         const st = document.getElementById('serverStatus');
         if (st) st.textContent = 'Backend offline';
       }
-    })();
+    }
+
+    // ══════════════════════════════════════════
+    //  AUTH — Login / Logout
+    // ══════════════════════════════════════════
+    const AUTH_USER = 'admin';
+    const AUTH_PASS = '1234';
+
+    function doLogin() {
+      const user = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const errEl = document.getElementById('loginErr');
+      const okEl  = document.getElementById('loginSuccess');
+      const btn   = document.getElementById('loginBtn');
+
+      errEl.textContent = '';
+      errEl.classList.remove('show');
+      okEl.classList.remove('show');
+
+      if (!user || !pass) {
+        errEl.textContent = '⚠ Please enter username and password.';
+        errEl.classList.add('show');
+        return;
+      }
+      if (user !== AUTH_USER || pass !== AUTH_PASS) {
+        errEl.textContent = '✕ Invalid credentials. Try admin / 1234';
+        errEl.classList.add('show');
+        // shake animation
+        const card = document.querySelector('.login-card');
+        card.style.animation = 'none';
+        card.style.transform = 'translateX(0)';
+        let shakes = 0;
+        const shake = setInterval(() => {
+          card.style.transform = shakes % 2 === 0 ? 'translateX(-8px)' : 'translateX(8px)';
+          if (++shakes >= 6) { clearInterval(shake); card.style.transform = 'none'; }
+        }, 60);
+        return;
+      }
+
+      // Success
+      btn.disabled = true;
+      okEl.textContent = '✓ Authenticated — launching terminal…';
+      okEl.classList.add('show');
+
+      setTimeout(() => {
+        const overlay = document.getElementById('login-overlay');
+        overlay.classList.add('hide');
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          document.getElementById('app-shell').style.display = 'block';
+          // Trigger initial paint
+          buildTestChips();
+          checkBackend();
+        }, 380);
+      }, 700);
+    }
+
+    function logoutOperator() {
+      // Hide app, show login
+      document.getElementById('app-shell').style.display = 'none';
+      const overlay = document.getElementById('login-overlay');
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '1';
+      overlay.style.transform = 'none';
+      overlay.classList.remove('hide');
+      // Reset login form
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginErr').classList.remove('show');
+      document.getElementById('loginSuccess').classList.remove('show');
+      document.getElementById('loginBtn').disabled = false;
+      // Close chat if open
+      closeChatPanel();
+    }
+
+    // Support pressing Enter on login fields
+    document.getElementById('loginPass').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+    document.getElementById('loginUser').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('loginPass').focus();
+    });
+
+    // ══════════════════════════════════════════
+    //  AI CHAT PANEL
+    // ══════════════════════════════════════════
+    let chatOpen = false;
+    let chatHistory = [];   // {role:'user'|'assistant', content:string}
+
+    function toggleChat() {
+      chatOpen ? closeChatPanel() : openChatPanel();
+    }
+
+    function openChatPanel() {
+      chatOpen = true;
+      document.getElementById('chat-panel').classList.add('open');
+      document.getElementById('chatToggleBtn').classList.add('panel-open');
+      document.getElementById('app-shell').classList.add('chat-dimmed');
+      document.getElementById('chatInput').focus();
+    }
+
+    function closeChatPanel() {
+      chatOpen = false;
+      document.getElementById('chat-panel').classList.remove('open');
+      const btn = document.getElementById('chatToggleBtn');
+      if (btn) btn.classList.remove('panel-open');
+      const shell = document.getElementById('app-shell');
+      if (shell) shell.classList.remove('chat-dimmed');
+    }
+
+    function chatSuggest(el) {
+      document.getElementById('chatInput').value = el.textContent.trim();
+      sendChatMessage();
+    }
+
+    function chatKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChatMessage();
+      }
+    }
+
+    function appendChatMsg(role, text) {
+      const hint = document.getElementById('chatEmptyHint');
+      if (hint) hint.style.display = 'none';
+
+      const container = document.getElementById('chatMessages');
+      const wrap = document.createElement('div');
+      wrap.className = 'chat-msg ' + role;
+
+      const label = document.createElement('div');
+      label.className = 'chat-msg-label';
+      label.textContent = role === 'user' ? 'You' : 'AI';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble';
+      // Simple markdown-like: newlines → <br>, **bold**
+      bubble.innerHTML = text
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`(.+?)`/g, '<code style="background:var(--bg);padding:1px 4px;border-radius:3px;font-size:11px">$1</code>')
+        .replace(/\n/g, '<br>');
+
+      wrap.appendChild(label);
+      wrap.appendChild(bubble);
+      container.appendChild(wrap);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      input.style.height = '';
+
+      // Disable send
+      const sendBtn = document.getElementById('chatSendBtn');
+      sendBtn.disabled = true;
+
+      // Append user message
+      appendChatMsg('user', text);
+      chatHistory.push({ role: 'user', content: text });
+
+      // Show typing
+      const typing = document.getElementById('chatTyping');
+      typing.classList.add('show');
+      document.getElementById('chatMessages').scrollTop = 9999;
+
+      try {
+        const res = await fetch(`${API}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: chatHistory })
+        });
+        const data = await res.json();
+        const reply = data.response || data.reply || data.error || 'No response from AI.';
+        chatHistory.push({ role: 'assistant', content: reply });
+        typing.classList.remove('show');
+        appendChatMsg('ai', reply);
+      } catch (e) {
+        typing.classList.remove('show');
+        appendChatMsg('ai', '⚠ Could not reach the backend. Make sure backend.py is running on port 8765.');
+      }
+
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+    // Auto-resize chat textarea
+    document.addEventListener('DOMContentLoaded', () => {
+      const ta = document.getElementById('chatInput');
+      if (ta) {
+        ta.addEventListener('input', () => {
+          ta.style.height = '';
+          ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+        });
+      }
+    });
 
   </script>
+</div><!-- /#app-shell -->
 </body>
 
 </html>

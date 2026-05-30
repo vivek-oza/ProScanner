@@ -2,9 +2,6 @@
 
 This document is written for someone who must **understand, demonstrate, and present** the project (for example, to a college instructor) as if they developed it. It explains what the system does, how it is built, how to run it, and what to say in an academic setting.
 
-Important link: 
-https://github.com/yogsec/SQL-Injection-Payloads
-
 ---
 
 ## 1. Executive summary (what to tell your teacher in one minute)
@@ -78,13 +75,13 @@ flowchart LR
 
 ## 4. Technology stack
 
-| Layer | Technology |
-|--------|------------|
-| Backend | Python 3, `http.server` (`HTTPServer`, `BaseHTTPRequestHandler`) |
-| HTTP client | `urllib.request`, `ssl`, `socket` |
-| Database | SQLite3 (`scans.db`), WAL journal mode |
-| Frontend | Plain HTML, CSS, JavaScript (no React/Vue/npm build) |
-| Fonts | Google Fonts (Inter, JetBrains Mono) — requires network in browser |
+| Layer       | Technology                                                         |
+| ----------- | ------------------------------------------------------------------ |
+| Backend     | Python 3, `http.server` (`HTTPServer`, `BaseHTTPRequestHandler`)   |
+| HTTP client | `urllib.request`, `ssl`, `socket`                                  |
+| Database    | SQLite3 (`scans.db`), WAL journal mode                             |
+| Frontend    | Plain HTML, CSS, JavaScript (no React/Vue/npm build)               |
+| Fonts       | Google Fonts (Inter, JetBrains Mono) — requires network in browser |
 
 **Dependencies:** The backend uses **only the Python standard library** (no `requirements.txt` in-repo). You need a working **Python 3** interpreter.
 
@@ -92,12 +89,12 @@ flowchart LR
 
 ## 5. Repository layout
 
-| Path | Role |
-|------|------|
-| `backend.py` | Entire server: API routes, scan engines, DB, OWASP fix text, payload library |
-| `index.html` | Full UI: navigation, forms, charts, log tail, fetch calls to API |
-| `scans.db` | SQLite database (created/updated at runtime; may appear with `-wal`/`-shm` in WAL mode) |
-| `.git/` | Version control (exclude local DB from submissions if policy requires) |
+| Path         | Role                                                                                    |
+| ------------ | --------------------------------------------------------------------------------------- |
+| `backend.py` | Entire server: API routes, scan engines, DB, OWASP fix text, payload library            |
+| `index.html` | Full UI: navigation, forms, charts, log tail, fetch calls to API                        |
+| `scans.db`   | SQLite database (created/updated at runtime; may appear with `-wal`/`-shm` in WAL mode) |
+| `.git/`      | Version control (exclude local DB from submissions if policy requires)                  |
 
 The server tries to serve `index_redesigned.html` first, then **`index.html`**, for the root path `/`.
 
@@ -137,18 +134,18 @@ If you deploy elsewhere, update this to match the server’s host and port.
 
 These correspond to sidebar navigation (`data-page` attributes):
 
-| Page | Purpose |
-|------|---------|
-| **Scanner** | Main OWASP-style parameter scanning; optional category filter |
-| **SSL** | Standalone TLS/HTTPS certificate and HSTS-oriented check |
-| **API Security** | GET/POST probes + injection attempts on a user-supplied list of paths |
+| Page             | Purpose                                                                   |
+| ---------------- | ------------------------------------------------------------------------- |
+| **Scanner**      | Main OWASP-style parameter scanning; optional category filter             |
+| **SSL**          | Standalone TLS/HTTPS certificate and HSTS-oriented check                  |
+| **API Security** | GET/POST probes + injection attempts on a user-supplied list of paths     |
 | **Port Scanner** | TCP connect scan of a **fixed set** of well-known ports on the URL’s host |
-| **Custom Tests** | Save and run user-defined GET/POST checks with optional expected status |
-| **Dashboard** | Aggregated charts: stats, categories, risk, 14-day timeline, top targets |
-| **History** | List of past scans from DB |
-| **Report** | Drill into a single scan’s results |
-| **Payloads** | Browse payload definitions fetched from `/api/payloads` |
-| **Simulation** | Educational / demo-oriented content in the UI |
+| **Custom Tests** | Save and run user-defined GET/POST checks with optional expected status   |
+| **Dashboard**    | Aggregated charts: stats, categories, risk, 14-day timeline, top targets  |
+| **History**      | List of past scans from DB                                                |
+| **Report**       | Drill into a single scan’s results                                        |
+| **Payloads**     | Browse payload definitions fetched from `/api/payloads`                   |
+| **Simulation**   | Educational / demo-oriented content in the UI                             |
 
 ---
 
@@ -158,37 +155,37 @@ Base URL: `http://localhost:8765` (default).
 
 ### GET
 
-| Endpoint | Description |
-|----------|-------------|
-| `/` | Serves `index_redesigned.html` or `index.html` |
-| `/api/scans` | List all scans (metadata, no full results blob in list) |
-| `/api/scans/{id}` | Single scan including parsed `results` JSON |
-| `/api/stats` | `{ total, vulnerable, safe }` |
-| `/api/dashboard` | Rich aggregates for charts |
-| `/api/logs?since=N` | Streaming log buffer from index `N` |
-| `/api/payloads` | Full `VULNERABILITY_TESTS` array |
-| `/api/categories` | List of category names (from OWASP fix keys) |
-| `/api/owasp_fixes` | Full remediation dictionary |
-| `/api/custom_tests` | All saved custom tests |
+| Endpoint            | Description                                             |
+| ------------------- | ------------------------------------------------------- |
+| `/`                 | Serves `index_redesigned.html` or `index.html`          |
+| `/api/scans`        | List all scans (metadata, no full results blob in list) |
+| `/api/scans/{id}`   | Single scan including parsed `results` JSON             |
+| `/api/stats`        | `{ total, vulnerable, safe }`                           |
+| `/api/dashboard`    | Rich aggregates for charts                              |
+| `/api/logs?since=N` | Streaming log buffer from index `N`                     |
+| `/api/payloads`     | Full `VULNERABILITY_TESTS` array                        |
+| `/api/categories`   | List of category names (from OWASP fix keys)            |
+| `/api/owasp_fixes`  | Full remediation dictionary                             |
+| `/api/custom_tests` | All saved custom tests                                  |
 
 ### POST
 
-| Endpoint | Body (JSON) | Description |
-|----------|-------------|-------------|
-| `/api/scan` | `{ "url": "...", "categories": ["SQL Injection", ...] }` — `categories` optional | Full parameter scan + optional SSL |
-| `/api/ssl` | `{ "url": "..." }` | SSL/TLS check only |
-| `/api/api_security` | `{ "url": "...", "paths": ["/api/users", ...] }` — `paths` optional | API security pass (default path list if omitted) |
-| `/api/port_scan` | `{ "url": "..." }` | Port scan on host derived from URL |
-| `/api/custom_tests` | `{ "name", "url", "description?", "method?", "payload?", "category?", "expected_status?" }` | Create custom test |
-| `/api/custom_tests/{id}/run` | (empty body) | Execute custom test |
+| Endpoint                     | Body (JSON)                                                                                 | Description                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `/api/scan`                  | `{ "url": "...", "categories": ["SQL Injection", ...] }` — `categories` optional            | Full parameter scan + optional SSL               |
+| `/api/ssl`                   | `{ "url": "..." }`                                                                          | SSL/TLS check only                               |
+| `/api/api_security`          | `{ "url": "...", "paths": ["/api/users", ...] }` — `paths` optional                         | API security pass (default path list if omitted) |
+| `/api/port_scan`             | `{ "url": "..." }`                                                                          | Port scan on host derived from URL               |
+| `/api/custom_tests`          | `{ "name", "url", "description?", "method?", "payload?", "category?", "expected_status?" }` | Create custom test                               |
+| `/api/custom_tests/{id}/run` | (empty body)                                                                                | Execute custom test                              |
 
 ### DELETE
 
-| Endpoint | Description |
-|----------|-------------|
-| `/api/scans/{id}` | Delete scan row |
-| `/api/custom_tests/{id}` | Delete custom test |
-| `/api/logs` | Clear in-memory log buffer |
+| Endpoint                 | Description                |
+| ------------------------ | -------------------------- |
+| `/api/scans/{id}`        | Delete scan row            |
+| `/api/custom_tests/{id}` | Delete custom test         |
+| `/api/logs`              | Clear in-memory log buffer |
 
 **CORS:** Responses include `Access-Control-Allow-Origin: *` (convenient for local dev; tighten for production).
 
@@ -210,29 +207,29 @@ Present these as **defense-in-depth** choices: they reduce accidental misuse but
 
 ### Table `scans`
 
-| Column | Type | Meaning |
-|--------|------|---------|
-| `id` | INTEGER PK | Auto-increment |
-| `target_url` | TEXT | Scanned URL |
-| `scan_time` | TEXT | Timestamp string (UTC formatted in code) |
-| `total_tests` | INTEGER | Count of test executions |
-| `vulnerabilities_found` | INTEGER | Count of findings flagged vulnerable |
-| `status` | TEXT | `VULNERABLE` or `SAFE` |
-| `duration_seconds` | REAL | Wall time |
-| `results` | TEXT | JSON array of per-test result objects |
+| Column                  | Type       | Meaning                                  |
+| ----------------------- | ---------- | ---------------------------------------- |
+| `id`                    | INTEGER PK | Auto-increment                           |
+| `target_url`            | TEXT       | Scanned URL                              |
+| `scan_time`             | TEXT       | Timestamp string (UTC formatted in code) |
+| `total_tests`           | INTEGER    | Count of test executions                 |
+| `vulnerabilities_found` | INTEGER    | Count of findings flagged vulnerable     |
+| `status`                | TEXT       | `VULNERABLE` or `SAFE`                   |
+| `duration_seconds`      | REAL       | Wall time                                |
+| `results`               | TEXT       | JSON array of per-test result objects    |
 
 ### Table `custom_tests`
 
-| Column | Meaning |
-|--------|---------|
-| `id` | Primary key |
-| `name`, `description` | User labels |
-| `url` | Target (method applied by server) |
-| `method` | `GET` or `POST` (default GET) |
-| `payload` | Optional; appended as `input` query param for GET, JSON `input` for POST |
-| `category` | Default `Custom` |
-| `expected_status` | Optional HTTP status expectation |
-| `created_at` | UTC timestamp string |
+| Column                | Meaning                                                                  |
+| --------------------- | ------------------------------------------------------------------------ |
+| `id`                  | Primary key                                                              |
+| `name`, `description` | User labels                                                              |
+| `url`                 | Target (method applied by server)                                        |
+| `method`              | `GET` or `POST` (default GET)                                            |
+| `payload`             | Optional; appended as `input` query param for GET, JSON `input` for POST |
+| `category`            | Default `Custom`                                                         |
+| `expected_status`     | Optional HTTP status expectation                                         |
+| `created_at`          | UTC timestamp string                                                     |
 
 ---
 
@@ -292,15 +289,15 @@ The constant **`VULNERABILITY_TESTS`** in `backend.py` defines many entries. Eac
 
 ## 15. Glossary (for slides)
 
-| Term | Short definition |
-|------|-------------------|
-| **OWASP** | Open Web Application Security Project; publishes Top 10 and guidance |
-| **SQLi** | SQL injection — untrusted input interpreted as SQL |
-| **XSS** | Cross-site scripting — untrusted script in HTML context |
-| **SSRF** | Server-side request forgery — server tricked into calling internal URLs |
-| **TLS/SSL** | Encryption and identity for HTTPS |
-| **Heuristic scan** | Rule-based signals, not guaranteed exploitation |
-| **SQLite** | Embedded file-based relational database |
+| Term               | Short definition                                                        |
+| ------------------ | ----------------------------------------------------------------------- |
+| **OWASP**          | Open Web Application Security Project; publishes Top 10 and guidance    |
+| **SQLi**           | SQL injection — untrusted input interpreted as SQL                      |
+| **XSS**            | Cross-site scripting — untrusted script in HTML context                 |
+| **SSRF**           | Server-side request forgery — server tricked into calling internal URLs |
+| **TLS/SSL**        | Encryption and identity for HTTPS                                       |
+| **Heuristic scan** | Rule-based signals, not guaranteed exploitation                         |
+| **SQLite**         | Embedded file-based relational database                                 |
 
 ---
 
@@ -312,12 +309,12 @@ The **browser title** reads “ProScanner v4 — Security Terminal” while `bac
 
 ## 17. Quick troubleshooting
 
-| Symptom | Likely cause |
-|---------|----------------|
-| UI shows offline / cannot load scans | `backend.py` not running or wrong `API` URL in `index.html` |
-| Port already in use | Another process on 8765; set `PORT` env var |
-| Target rejected | Private IP/hostname blocked by `validate_url` |
-| Empty or odd history | `scans.db` missing or from different machine — DB is local state |
+| Symptom                              | Likely cause                                                     |
+| ------------------------------------ | ---------------------------------------------------------------- |
+| UI shows offline / cannot load scans | `backend.py` not running or wrong `API` URL in `index.html`      |
+| Port already in use                  | Another process on 8765; set `PORT` env var                      |
+| Target rejected                      | Private IP/hostname blocked by `validate_url`                    |
+| Empty or odd history                 | `scans.db` missing or from different machine — DB is local state |
 
 ---
 
