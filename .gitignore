@@ -1,0 +1,17 @@
+# Environment variables (API keys, secrets)
+.env
+.env.*
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db

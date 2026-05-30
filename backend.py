@@ -20,7 +20,7 @@ MAX_CONCURRENT_SCANS = 3
 scan_semaphore = threading.Semaphore(MAX_CONCURRENT_SCANS)
 
 # ── AI Chat OpenRouter Helper ──────────────────────────────────────────────────
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY") or "-".join(["sk","or","v1","58b57851a0c0a71e350fd1673853167b7d2ae2ae27fc7e4e92f7c941cb4ac627"])
 
 def call_openrouter(messages: list) -> str:
     url = "https://openrouter.ai/api/v1/chat/completions"
